@@ -91,14 +91,82 @@ Frontend | Flowbite | React Component Library | React component library to imple
         - 1.2.9.6. A jwt will be returned
         - 1.2.9.7. The jwt will be stored in local cookies
         - 1.2.9.8. The user will be redirected to their recipe list
+- 1.3. Users can request to reset their password
+    - 1.3.1. On the Login page, display a <kbd>Forgot Password</kbd> link
+        - 1.3.1.1. Clicking this will redirect the user to a forgot password page
+            - 1.3.1.1.1. A label saying <kbd>Forgot Password</kbd>
+            - 1.3.1.1.2. A label for an email address
+            - 1.3.1.1.3. A <kbd>Confirm</kbd> button
 
 ### 2. Recipe Management
+- 2.1 A button labeled "Add recipe"
+    - 2.1.1 
+    - 2.1.2 Name of recipe
+        - 2.1.1 Categories
+            - 2.1.1.1 Type of meal; breakfast, lunch, dinner, desert, snack
+        - 2.1.1.2 Tags
+            - 2.1.1.2.1 Difficulty
+            - 2.1.1.2.2 Regional Origin
+            - 2.1.1.2.3 Seasonal; being Winter, Spring, Summer, and Fall
+            - 2.1.1.2.4 Type of Cuisine; fast food, delicacy, etc.
+    - 2.1.2  Add ingredients
+        - 2.1.2.1 Add amount of ingredients
+    - 2.1.3 Tools Needed
+        - 2.1.3.1 This can be measuring cups, blender, oven, stove, etc.  
+    - 2.1.4 Instructions
+        - 2.1.4.1 Time needed
+        - 2.1.4.2 Order of ingredients added
+- 2.2 Modify recipes
+    - 2.2.1 Users can elect to modify their recipe via a button
+        - 2.2.1.1 All fields will be editable by the user
+        - 2.2.1.2 The user can click a save button to save their changes
+            - 2.2.1.2.1 Upon completion, the user will be alerted that their changes have been saved
+            - 2.2.1.2.2 If unable to save changes, the user will 
 
 ### 3. Meal Planning
+- 3.1. There will be a meal planning page that will allow the user to assign meals to days of the week
+    - 3.1.1. A table with 7 columns
+        - 3.1.1.1. Header row containing the days of the week, starting with Sunday
+        - 3.1.1.2. Row containing recipes assigned to that day
+        - 3.1.1.3. Assign Recipe button below recipes for the day
+            - 3.1.1.3.1. Clicking Assign Recipe will open a popup of saved and created recipes to select
+            - 3.1.1.3.2. Clicking a recipe will add the recipe to that day
+            - 3.1.1.3.3. A day can have multiple recipes assigned
+    - 3.1.2. An <kbd>Export Shopping List</kbd> button on the top right of the table
+        - 3.1.2.1. Exporting the list will create a pdf shopping list of each ingredient and the amount required
+    - 3.1.3. An <kbd>Export Week</kbd> button that will export all recipes, ingredients, and instructions to a pdf document
+    - 3.1.4. A <kbd>Clear</kbd> button to clear the week's plans
 
 ### 4. Recipe Ratings
+- 4.1 A public recipe can have multiple ratings
+    - 4.1.1 The highest ratings will be featured on a recipe
+    - 4.1.2 There will be a <kbd>Ratings</kbd> button next to the highest rating
+    - 4.1.3 Users can rate a recipe upon clicking the <kbd>Rate</kbd> button
+- 4.2 Star Ratings between zero and five stars, with increments of one star
+    - 4.2.1 Clicking on the <kbd>Ratings</kbd> button will reveal the number of ratings on a per star basis
+- 4.3 These ratings will include a review
+    - 4.3.1 Users will the option to write a review with their rating in a text area.
+    - 4.3.2 Under a posted review, users will be able to agree or disagree with a review
+        4.3.2.1 A Thumbs Up icon for agree
+        4.3.2.2 A Thumbs Down icon for disagree
 
-## Updated Timeline
+
+### 5. Navigation
+- 5.1 There will be a navigation bar on the top of the site
+    - 5.1.1 There will be a Cookbook Connect label on the left side
+    - 5.1.2 There will be a group of buttons on the right side
+        - 5.1.2.1 A <kbd>Recipes</kbd> button
+            - 5.1.2.2.1 This will redirect the user to a publice recipe page
+        - 5.1.2.2 A <kbd>My Recipes</kbd> button
+            - 5.1.2.2.1 This will redirect the user to a list of recipes they have created as well as saved
+        - 5.1.2.3 A <kbd>Meal Planning</kbd> button
+            - 5.1.2.3.1 This will redirect the user to a weekly meal planning page
+
+
+
+
+
+### Updated Timeline
 
 <table>
     <tr>
@@ -139,6 +207,10 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <b>All Members:</b>
             <br>
             Project requirements &amp; presentation
+            <br><br>
+            <b>Bryan:</b>
+            <br>
+            Create repository and invite others
         </td>
     </tr>
     <tr>
@@ -156,13 +228,9 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <br>
             Setup project with Next.js, React, TypeORM, and other libraries
             <br><br>
-            <b>Tyler:</b>
+            <b>Tyler & John:</b>
             <br>
-            Asd
-            <br><br>
-            <b>John:</b>
-            <br>
-            Asd
+            Begin familiarizing self with language and libraries we will be using
         </td>
     </tr>
     <tr>
@@ -178,11 +246,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Login component
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Navigation component
         </td>
     </tr>
     <tr>
@@ -198,11 +266,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Register component
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Recipe component
         </td>
     </tr>
     <tr>
@@ -218,11 +286,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Rating component
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Recipe list component
         </td>
     </tr>
     <tr>
@@ -244,15 +312,15 @@ Frontend | Flowbite | React Component Library | React component library to imple
         <td>
             <b>Bryan:</b>
             <br>
-            User authentication backend
+            Server-side connections
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Recipe search component
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Recipe creation component
         </td>
     </tr>
     <tr>
@@ -264,15 +332,17 @@ Frontend | Flowbite | React Component Library | React component library to imple
         <td>
             <b>Bryan:</b>
             <br>
-            Asd
+            User authentication backend
+            <br>
+            Server-side connections
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Recipe saving component
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Recipe modification component
         </td>
     </tr>
     <tr>
@@ -284,15 +354,15 @@ Frontend | Flowbite | React Component Library | React component library to imple
         <td>
             <b>Bryan:</b>
             <br>
-            Asd
+            Server-side connections
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Meal planning page
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Recipe comments component
         </td>
     </tr>
     <tr>
@@ -304,11 +374,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
         <td>
             <b>Bryan:</b>
             <br>
-            Asd
+            Server-side connections
             <br><br>
             <b>Tyler:</b>
             <br>
-            Asd
+            Export meal list to shopping list
             <br><br>
             <b>John:</b>
             <br>
@@ -322,17 +392,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             Apr 8 - Apr 12
         </td>
         <td>
-            <b>Bryan:</b>
+            <b>All Members:</b>
             <br>
-            Asd
-            <br><br>
-            <b>Tyler:</b>
+            Extra time to continue tasks requiring more time
             <br>
-            Asd
-            <br><br>
-            <b>John:</b>
-            <br>
-            Asd
+            Begin testing
         </td>
     </tr>
     <tr>
@@ -342,17 +406,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             Apr 15 - Apr 19
         </td>
         <td>
-            <b>Bryan:</b>
+            <b>All Members:</b>
             <br>
-            Asd
-            <br><br>
-            <b>Tyler:</b>
+            Test all features of the site
             <br>
-            Asd
-            <br><br>
-            <b>John:</b>
-            <br>
-            Asd
+            Correct any issues
         </td>
     </tr>
     <tr>
@@ -362,17 +420,11 @@ Frontend | Flowbite | React Component Library | React component library to imple
             Apr 22 - Apr 24
         </td>
         <td>
-            <b>Bryan:</b>
+            <b>All Members:</b>
             <br>
-            Asd
-            <br><br>
-            <b>Tyler:</b>
+            Final touches and fixes
             <br>
-            Asd
-            <br><br>
-            <b>John:</b>
-            <br>
-            Asd
+            Prepare for presentation
         </td>
     </tr>
 </table>
