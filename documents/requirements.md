@@ -463,7 +463,7 @@ Frontend | Flowbite | React Component Library | React component library to imple
             <br><br>
             <b>John:</b>
             <br>
-            Asd
+            Rating like/dislike
         </td>
     </tr>
     <tr>
