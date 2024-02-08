@@ -177,30 +177,30 @@ Frontend | Flowbite | React Component Library | React component library to imple
                         - 2.5.1.1.2.12.1 Defaults to “Any”
                         - 2.5.1.1.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
             -2.5.1.2 A button labeled “Search Public Recipes”
-                -2.5.1.2.1 This button will allow users to search through publicly available recipes
-                -2.5.1.2.2 On click, the search view will appear
-                    -2.5.1.2.2.1 An empty textfield
-                    -2.5.1.2.2.2 A button labeled “Search”
-                    -2.5.1.2.2.3 A label that says “Category”
-                    -2.5.1.2.2.4 A choice box 
-                        -2.5.1.2.2.4.1 Defaults to “Any”
-                        -2.5.1.2.2.4.2 Contains all seasons: “Spring”, “Fall”, etc…
-                    -2.5.1.2.2.5 A Label that says “Difficulty”
-                    -2.5.1.2.2.6 A choice box
-                        -2.5.1.2.2.6.1 Defaults to “Any”
-                        -2.5.1.2.2.6.2 Contains “Easy”, “Medium”, “Advanced”
-                    -2.5.1.2.2.7 A label that says “Regional Origin”
-                    -2.5.1.2.2.8 A choice box
-                        -2.5.1.2.2.8.1 Defaults to “Any”
-                        -2.5.1.2.2.8.2 Contains “Indian”, “Italian”, etc…
-                    -2.5.1.2.2.9 A label that says “Seasonal”
-                    -2.5.1.2.2.10 A choice box
-                        -2.5.1.2.2.10.1 Defaults to “Any”
-                        -2.5.1.2.2.10.2 Contains all seasons: “Spring”, “Fall”, etc…
-                    -2.5.1.2.2.11 A label that says “Type of Cuisine”
-                    -2.5.1.2.2.12 A choice box
-                        -2.5.1.2.2.12.1 Defaults to “Any”
-                        -2.5.1.2.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
+                - 2.5.1.2.1 This button will allow users to search through publicly available recipes
+                - 2.5.1.2.2 On click, the search view will appear
+                    - 2.5.1.2.2.1 An empty textfield
+                    - 2.5.1.2.2.2 A button labeled “Search”
+                    - 2.5.1.2.2.3 A label that says “Category”
+                    - 2.5.1.2.2.4 A choice box 
+                        - 2.5.1.2.2.4.1 Defaults to “Any”
+                        - 2.5.1.2.2.4.2 Contains all seasons: “Spring”, “Fall”, etc…
+                    - 2.5.1.2.2.5 A Label that says “Difficulty”
+                    - 2.5.1.2.2.6 A choice box
+                        - 2.5.1.2.2.6.1 Defaults to “Any”
+                        - 2.5.1.2.2.6.2 Contains “Easy”, “Medium”, “Advanced”
+                    - 2.5.1.2.2.7 A label that says “Regional Origin”
+                    - 2.5.1.2.2.8 A choice box
+                        - 2.5.1.2.2.8.1 Defaults to “Any”
+                        - 2.5.1.2.2.8.2 Contains “Indian”, “Italian”, etc…
+                    - 2.5.1.2.2.9 A label that says “Seasonal”
+                    - 2.5.1.2.2.10 A choice box
+                        - 2.5.1.2.2.10.1 Defaults to “Any”
+                        - 2.5.1.2.2.10.2 Contains all seasons: “Spring”, “Fall”, etc…
+                    - 2.5.1.2.2.11 A label that says “Type of Cuisine”
+                    - 2.5.1.2.2.12 A choice box
+                        - 2.5.1.2.2.12.1 Defaults to “Any”
+                        - 2.5.1.2.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
     - 2.6 Save recipes
         - 2.6.1 Users can save user-made recipes as well as public recipes
         - 2.6.2  A button labeled “Save Recipe”
