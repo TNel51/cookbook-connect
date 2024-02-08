@@ -16,7 +16,6 @@ Cookbook Connect
 
 &nbsp;&nbsp;&nbsp;&nbsp;Users will also have custom ways to store their recipes; either by type of food, or by preferred days of the week. This will allow for personalized organization as well as ensure users have a clear path to what they want to make and have for meals in case they don’t know off the top of their head. They also have the ability to share their recipes as well as look up recipes from other users by searching or looking at a recommended recipe list.
 
-
 ## Tools & Technologies
 
 Location | Dependency | Type | Rationale
@@ -206,7 +205,6 @@ Frontend | Flowbite | React Component Library | React component library to imple
         - 2.6.2  A button labeled “Save Recipe”
             - 2.6.2.2 On click, the recipe will be added to the user’s saved list, public or user-made.
 
-
 ### 3. Meal Planning
 - 3.1. There will be a meal planning page that will allow the user to assign meals to days of the week
     - 3.1.1. A table with 7 columns
@@ -231,9 +229,8 @@ Frontend | Flowbite | React Component Library | React component library to imple
 - 4.3 These ratings will include a review
     - 4.3.1 Users will the option to write a review with their rating in a text area.
     - 4.3.2 Under a posted review, users will be able to agree or disagree with a review
-        4.3.2.1 A Thumbs Up icon for agree
-        4.3.2.2 A Thumbs Down icon for disagree
-
+        - 4.3.2.1 A Thumbs Up icon for agree
+        - 4.3.2.2 A Thumbs Down icon for disagree
 
 ### 5. Navigation
 - 5.1 There will be a navigation bar on the top of the site
@@ -245,10 +242,10 @@ Frontend | Flowbite | React Component Library | React component library to imple
             - 5.1.2.2.1 This will redirect the user to a list of recipes they have created as well as saved
         - 5.1.2.3 A <kbd>Meal Planning</kbd> button
             - 5.1.2.3.1 This will redirect the user to a weekly meal planning page
-
-
-
-
+    - 5.1.3. Navigation bar will be collapsible on smaller screens and devices
+        - 5.1.3.1. A Cookbook Connect label
+        - 5.1.3.2. A hamburger menu button
+            - 5.1.3.2.1. When clicking the button, the navigation bar will be expanded and show the normal options
 
 ### Updated Timeline
 
