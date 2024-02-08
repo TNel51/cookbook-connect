@@ -176,7 +176,7 @@ Frontend | Flowbite | React Component Library | React component library to imple
                     - 2.5.1.1.2.12 A choice box
                         - 2.5.1.1.2.12.1 Defaults to “Any”
                         - 2.5.1.1.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
-            -2.5.1.2 A button labeled “Search Public Recipes”
+            - 2.5.1.2 A button labeled “Search Public Recipes”
                 - 2.5.1.2.1 This button will allow users to search through publicly available recipes
                 - 2.5.1.2.2 On click, the search view will appear
                     - 2.5.1.2.2.1 An empty textfield
