@@ -170,8 +170,8 @@ Frontend | Flowbite | React Component Library | React component library to imple
                         - 2.5.1.1.2.8.2 Contains “Indian”, “Italian”, etc…
                     - 2.5.1.1.2.9 A label that says “Seasonal”
                     - 2.5.1.1.2.10 A choice box
-                        - 2.5.1.1.2.10.1Defaults to “Any”
-                        - 2.5.1.1.2.10.2Contains all seasons: “Spring”, “Fall”, etc…
+                        - 2.5.1.1.2.10.1 Defaults to “Any”
+                        - 2.5.1.1.2.10.2 Contains all seasons: “Spring”, “Fall”, etc…
                     - 2.5.1.1.2.11 A label that says “Type of Cuisine”
                     - 2.5.1.1.2.12 A choice box
                         - 2.5.1.1.2.12.1 Defaults to “Any”
