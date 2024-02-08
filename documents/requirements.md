@@ -205,7 +205,7 @@ Frontend | Flowbite | React Component Library | React component library to imple
         - 2.6.2  A button labeled “Save Recipe”
             - 2.6.2.1 On click, the recipe will be added to the user’s saved list.
             - 2.6.2.2 If the recipe is already saved, the button will read "Saved"
-                  - 2.6.2.2.1 On click, will remove the recipe from the user's saved list
+                - 2.6.2.2.1 On click, will remove the recipe from the user's saved list
 
 ### 3. Meal Planning
 - 3.1. There will be a meal planning page that will allow the user to assign meals to days of the week
