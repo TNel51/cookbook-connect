@@ -106,13 +106,13 @@ Frontend | Flowbite | React Component Library | React component library to imple
             - 2.1.1.2.1 Type of meal; breakfast, lunch, dinner, dessert, snack
         - 2.1.1.3 Tags
             - 2.1.1.3.1 A choicebox labeled “Difficulty”
-                -2.1.1.3.1.1 Users can choose between easy, medium, or advanced
+                - 2.1.1.3.1.1 Users can choose between easy, medium, or advanced
             - 2.1.1.3.2 A label “Regional Origin”
-                -2.1.1.3.2.1 A textfield for regional origin
+                - 2.1.1.3.2.1 A textfield for regional origin
             - 2.1.1.3.3 A choicebox labeled “Seasonal”
-                -2.1.1.3.3.1 Users can choose spring, summer, fall, winter, or any.
+                - 2.1.1.3.3.1 Users can choose spring, summer, fall, winter, or any.
             - 2.1.1.3.4 A label “Type of Cuisine” 
-                -2.1.1.3.4.1 A textfield to receive user input.	
+                - 2.1.1.3.4.1 A textfield to receive user input.	
         - 2.1.1.4 Add ingredients
             - 2.1.1.4.1 A field labeled “Quantity”
             - 2.1.1.4.2 A field labeled “Ingredient”
