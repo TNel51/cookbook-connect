@@ -99,29 +99,113 @@ Frontend | Flowbite | React Component Library | React component library to imple
             - 1.3.1.1.3. A <kbd>Confirm</kbd> button
 
 ### 2. Recipe Management
-- 2.1 A button labeled "Add recipe"
-    - 2.1.1 
-    - 2.1.2 Name of recipe
-        - 2.1.1 Categories
-            - 2.1.1.1 Type of meal; breakfast, lunch, dinner, desert, snack
-        - 2.1.1.2 Tags
-            - 2.1.1.2.1 Difficulty
-            - 2.1.1.2.2 Regional Origin
-            - 2.1.1.2.3 Seasonal; being Winter, Spring, Summer, and Fall
-            - 2.1.1.2.4 Type of Cuisine; fast food, delicacy, etc.
-    - 2.1.2  Add ingredients
-        - 2.1.2.1 Add amount of ingredients
-    - 2.1.3 Tools Needed
-        - 2.1.3.1 This can be measuring cups, blender, oven, stove, etc.  
-    - 2.1.4 Instructions
-        - 2.1.4.1 Time needed
-        - 2.1.4.2 Order of ingredients added
-- 2.2 Modify recipes
-    - 2.2.1 Users can elect to modify their recipe via a button
-        - 2.2.1.1 All fields will be editable by the user
-        - 2.2.1.2 The user can click a save button to save their changes
-            - 2.2.1.2.1 Upon completion, the user will be alerted that their changes have been saved
-            - 2.2.1.2.2 If unable to save changes, the user will 
+- 2.1 A button labeled “Add Recipe”
+    - 2.1.1 On click, will display add recipe view
+        - 2.1.1.1 A textfield for recipe name
+        - 2.1.1.2 A choicebox labeled “Categories”
+            - 2.1.1.2.1 Type of meal; breakfast, lunch, dinner, dessert, snack
+        - 2.1.1.3 Tags
+            - 2.1.1.3.1 A choicebox labeled “Difficulty”
+                -2.1.1.3.1.1 Users can choose between easy, medium, or advanced
+            - 2.1.1.3.2 A label “Regional Origin”
+                -2.1.1.3.2.1 A textfield for regional origin
+            - 2.1.1.3.3 A choicebox labeled “Seasonal”
+                -2.1.1.3.3.1 Users can choose spring, summer, fall, winter, or any.
+            - 2.1.1.3.4 A label “Type of Cuisine” 
+                -2.1.1.3.4.1 A textfield to receive user input.	
+        - 2.1.1.4 Add ingredients
+            - 2.1.1.4.1 A field labeled “Quantity”
+            - 2.1.1.4.2 A field labeled “Ingredient”
+            - 2.1.1.4.3 A button labeled “Add Ingredient”
+                - 2.1.1.4.3.1 On click, will allow the user to enter another ingredient
+        - 2.1.1.5 Tools Needed
+            - 2.1.1.5.1 A field labeled “Tool”
+            - 2.1.1.5.2 A button labeled “Add Tool”
+                - 2.1.1.5.2.1 On click, the user can enter another tool
+        - 2.1.1.6 Instructions
+            - 2.1.1.6.1 A field labeled “Time needed”
+            - 2.1.1.6.2 A text area for the user to enter instructions
+    - 2.2 Modify recipes
+        - 2.2.1 Must be a recipe created by the user
+        - 2.2.2 A button labeled “Modify Recipe”
+            - 2.2.2.1 On click, will display the add recipe view, but with fields filled in.
+                - 2.2.2.1.1 All fields will be editable by the user
+            - 2.2.2.2 A button labeled “Save”
+                - 2.2.2.2.1 Upon completion, the user will be alerted that their changes have been saved.
+                - 2.2.2.2.2 If unable to save changes, the user will be alerted that an error occurred.
+            - 2.2.2.3 A button labeled “Cancel”
+                - 2.2.2.3.1 After clicking cancel, the view will return to the previous uneditable view.
+    - 2.3 Delete recipes
+        - 2.3.1 A button labeled “Delete Recipe”
+            - 2.3.1.1 A pop-up will appear asking the user to confirm or cancel deleting their recipe
+                - 2.3.1.1.1 After clicking confirm, a pop-up will alert the user on the transaction.
+                    - 2.3.1.1.1.1 Success: recipe deleted
+                    - 2.3.1.1.1.2 Error: unable to delete recipe
+                - 2.3.1.1.2 Clicking cancel will close the pop-up
+    - 2.4 Share recipes
+        - 2.4.1 The user will have 2 options:
+            - 2.4.1.1 A button labeled “Make public”
+                - 2.4.1.1.1 On click, the recipe will be publicly available to other users
+            - 2.4.1.2 A button labeled “Copy Link”
+                - 2.4.1.2.1 Recipe will need to be public already
+                - 2.4.1.2.2 The link will be copied on the user’s system
+    - 2.5 Search recipes
+        - 2.5.1 There will be two options to search:
+            - 2.5.1.1 A button labeled “Search Saved Recipes”
+                - 2.5.1.1.1 This button will allow users to search through previously saved recipes
+                - 2.5.1.1.2 On click, the search view will appear
+                    - 2.5.1.1.2.1 An empty textfield
+                    - 2.5.1.1.2.2 A button labeled “Search”
+                    - 2.5.1.1.2.3 A label that says “Category”
+                    - 2.5.1.1.2.4 A choice box
+                        - 2.5.1.1.2.4.1 Defaults to “Any”
+                        - 2.5.1.1.2.4.2 Contains “Breakfast”, “Snack”, etc…
+                    - 2.5.1.1.2.5 A Label that says “Difficulty”
+                    - 2.5.1.1.2.6 A choice box 
+                        - 2.5.1.1.2.6.1 Defaults to “Any”
+                        - 2.5.1.1.2.6.2 Contains “Easy”, “Medium”, “Advanced”
+                    - 2.5.1.1.2.7 A label that says “Regional Origin”
+                    - 2.5.1.1.2.8 A choice box
+                        - 2.5.1.1.2.8.1 Defaults to “Any”
+                        - 2.5.1.1.2.8.2 Contains “Indian”, “Italian”, etc…
+                    - 2.5.1.1.2.9 A label that says “Seasonal”
+                    - 2.5.1.1.2.10 A choice box
+                        - 2.5.1.1.2.10.1Defaults to “Any”
+                        - 2.5.1.1.2.10.2Contains all seasons: “Spring”, “Fall”, etc…
+                    - 2.5.1.1.2.11 A label that says “Type of Cuisine”
+                    - 2.5.1.1.2.12 A choice box
+                        - 2.5.1.1.2.12.1 Defaults to “Any”
+                        - 2.5.1.1.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
+            -2.5.1.2 A button labeled “Search Public Recipes”
+                -2.5.1.2.1 This button will allow users to search through publicly available recipes
+                -2.5.1.2.2 On click, the search view will appear
+                    -2.5.1.2.2.1 An empty textfield
+                    -2.5.1.2.2.2 A button labeled “Search”
+                    -2.5.1.2.2.3 A label that says “Category”
+                    -2.5.1.2.2.4 A choice box 
+                        -2.5.1.2.2.4.1 Defaults to “Any”
+                        -2.5.1.2.2.4.2 Contains all seasons: “Spring”, “Fall”, etc…
+                    -2.5.1.2.2.5 A Label that says “Difficulty”
+                    -2.5.1.2.2.6 A choice box
+                        -2.5.1.2.2.6.1 Defaults to “Any”
+                        -2.5.1.2.2.6.2 Contains “Easy”, “Medium”, “Advanced”
+                    -2.5.1.2.2.7 A label that says “Regional Origin”
+                    -2.5.1.2.2.8 A choice box
+                        -2.5.1.2.2.8.1 Defaults to “Any”
+                        -2.5.1.2.2.8.2 Contains “Indian”, “Italian”, etc…
+                    -2.5.1.2.2.9 A label that says “Seasonal”
+                    -2.5.1.2.2.10 A choice box
+                        -2.5.1.2.2.10.1 Defaults to “Any”
+                        -2.5.1.2.2.10.2 Contains all seasons: “Spring”, “Fall”, etc…
+                    -2.5.1.2.2.11 A label that says “Type of Cuisine”
+                    -2.5.1.2.2.12 A choice box
+                        -2.5.1.2.2.12.1 Defaults to “Any”
+                        -2.5.1.2.2.12.2 Contains “Fast Food”, “Delicacy”, “Finger Food”, etc…
+    - 2.6 Save recipes
+        - 2.6.1 Users can save user-made recipes as well as public recipes
+        - 2.6.2  A button labeled “Save Recipe”
+            - 2.6.2.2 On click, the recipe will be added to the user’s saved list, public or user-made.
+
 
 ### 3. Meal Planning
 - 3.1. There will be a meal planning page that will allow the user to assign meals to days of the week
