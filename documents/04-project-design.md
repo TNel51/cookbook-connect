@@ -249,20 +249,68 @@ Block Diagram
 <table>
     <tr>
         <th>Request</th>
+        <th>Type</tg>
         <th>Request Data</th>
         <th>Response Data</th>
     </tr>
     <tr>
-        <td>login</td>
-        <td>
+        <td>/auth/login</td>
+        <td>POST</td>
+<td>
+
 ```json
 {
-    "email": string,
-    "password": string
+    "email": "string",
+    "password": "string"
 }
 ```
-        </td>
-        <td></td>
+
+</td>
+<td>
+
+```json
+{
+    "token": "string"
+}
+```
+
+</td>
+    </tr>
+        <tr>
+        <td>/recipes</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>None</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>/recipes</td>
+        <td>POST</td>
+<td>
+
+```json
+{
+    "title": "string",
+    "public": Boolean,
+    "tags": [
+        "string"
+    ],
+    "ingredients": [
+        {
+            "title": "string",
+            "quantityType": "string",
+            "quantity": number,
+            "required": Boolean,
+        }
+    ],
+    "instructions": [
+        "string"
+    ]
+}
+```
+
+</td>
+        <td>None</td>
     </tr>
 </table>
 
