@@ -21,6 +21,7 @@ Cookbook Connect
 Location | Dependency | Type | Rationale
 -- | -- | -- | --
 Infrastructure | DigitalOcean Apps | Deployment | DigitalOcean Apps will watch for changes to the GitHub repository and deploy the updated platform.
+Infrastructure | Supabase | PostgreSQL Database | Hosted database.
 Backend | NodeJS | JavaScript Runtime | Common backend language.
 Backend | Next.js | Web Framework | Framework for web applications including an api.
 Backend | TypeORM | Database ORM | Implement interface between backend and database.
