@@ -238,6 +238,7 @@ Cookbook Connect
 ### Block Diagram
 
 Block Diagram
+
 ![Block Diagram](/documents/04-block-diagram.drawio.png)
 
 ### Component Diagram
@@ -254,69 +255,435 @@ Block Diagram
         <th>Response Data</th>
     </tr>
     <tr>
-        <td>/auth/login</td>
-        <td>POST</td>
-<td>
-
-```json
-{
-    "email": "string",
-    "password": "string"
-}
-```
-
-</td>
-<td>
-
-```json
-{
-    "token": "string"
-}
-```
-
-</td>
-    </tr>
-        <tr>
-        <td>/recipes</td>
+        <td><kbd>/recipes</kbd><br>Get all recipes</td>
         <td>GET</td>
         <td>None</td>
-        <td>None</td>
+<td>
+
+```json
+[
+    {
+        "userId": number,
+        "userDisplayName": string,
+        "public": boolean,
+        "title": string,
+        "category": string,
+        "difficulty": string,
+        "instructions": string,
+        "time": string,
+        "tags": [
+            {
+                "id": number,
+                "text": string
+            }
+        ],
+        "ingredients": [
+            {
+                "id": number,
+                "text": string,
+                "unit": string,
+                "quantity": number,
+                "required": boolean
+            }
+        ],
+        "stars": number,
+        "ratings": number
+    }
+]
+```
+
+</td>
     </tr>
-    </tr>
-        <tr>
-        <td>/recipes</td>
+    <tr>
+        <td><kbd>/recipes</kbd><br>Create recipe</td>
         <td>POST</td>
 <td>
 
 ```json
 {
-    "title": "string",
-    "public": Boolean,
-    "tags": [
-        "string"
-    ],
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string,
+    "tags": [number],
     "ingredients": [
         {
-            "title": "string",
-            "quantityType": "string",
+            "id": number,
             "quantity": number,
-            "required": Boolean,
+            "required": boolean
         }
-    ],
-    "instructions": [
-        "string"
     ]
 }
 ```
 
 </td>
+<td>
+
+```json
+{
+    "userId": number,
+    "userDisplayName": string,
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string,
+    "tags": [
+        {
+            "code": string,
+            "text": string
+        }
+    ],
+    "ingredients": [
+        {
+            "id": number,
+            "text": string,
+            "unit": string,
+            "quantity": number,
+            "required": boolean
+        }
+    ],
+    "stars": number,
+    "ratings": number
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{id}</kbd><br>Get a recipe</td>
+        <td>GET</td>
         <td>None</td>
+<td>
+
+```json
+{
+    "userId": number,
+    "userDisplayName": string,
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string,
+    "tags": [
+        {
+            "code": string,
+            "text": string
+        }
+    ],
+    "ingredients": [
+        {
+            "id": number,
+            "text": string,
+            "unit": string,
+            "quantity": number,
+            "required": boolean
+        }
+    ],
+    "stars": number,
+    "ratings": number
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{id}</kbd><br>Modify a recipe</td>
+        <td>UPDATE</td>
+<td>
+
+```json
+{
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string
+}
+```
+
+</td>
+<td>
+
+```json
+{
+    "userId": number,
+    "userDisplayName": string,
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string,
+    "tags": [
+        {
+            "code": string,
+            "text": string
+        }
+    ],
+    "ingredients": [
+        {
+            "id": number,
+            "text": string,
+            "unit": string,
+            "quantity": number,
+            "required": boolean
+        }
+    ],
+    "stars": number,
+    "ratings": number
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{id}</kbd><br>Delete a recipe</td>
+        <td>DELETE</td>
+        <td>None</td>
+<td>
+
+```json
+{
+    "userId": number,
+    "userDisplayName": string,
+    "public": boolean,
+    "title": string,
+    "category": string,
+    "difficulty": string,
+    "instructions": string,
+    "time": string,
+    "tags": [
+        {
+            "code": string,
+            "text": string
+        }
+    ],
+    "ingredients": [
+        {
+            "id": number,
+            "text": string,
+            "unit": string,
+            "quantity": number,
+            "required": boolean
+        }
+    ]
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/ingredients</kbd><br>Get all ingredients</td>
+        <td>GET</td>
+        <td>None</td>
+<td>
+
+```json
+[
+    {
+        "id": number,
+        "code": string,
+        "text": string,
+        "unit": string
+    }
+]
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/ingredient</kbd><br>Create an ingredient</td>
+        <td>POST</td>
+<td>
+
+```json
+{
+    "code": string,
+    "text": string,
+    "unit": string
+}
+```
+
+</td>
+<td>
+
+```json
+{
+    "id": number,
+    "code": string,
+    "text": string,
+    "unit": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/ingredients/{ingr_id}</kbd><br>Assigns ingredient <kbd>ingr_id</kbd> to recipe <kbd>reci_id</kbd></td>
+        <td>PUT</td>
+        <td>None</td>
+<td>
+
+```json
+{
+    "id": number,
+    "code": string,
+    "text": string,
+    "unit": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/ingredients/{ingr_id}</kbd><br>Removes ingredient <kbd>ingr_id</kbd> from recipe <kbd>reci_id</kbd></td>
+        <td>DELETE</td>
+        <td>None</td>
+<td>
+
+```json
+{
+    "id": number,
+    "code": string,
+    "text": string,
+    "unit": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/tags</kbd><br>Get all tags</td>
+        <td>GET</td>
+        <td>None</td>
+<td>
+
+```json
+[
+    {
+        "code": string,
+        "text": string
+    }
+]
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/tag</kbd><br>Create a tag</td>
+        <td>POST</td>
+<td>
+
+```json
+{
+    "code": string,
+    "text": string
+}
+```
+
+</td>
+<td>
+
+```json
+{
+    "code": string,
+    "text": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/tags/{tag_id}</kbd><br>Assigns tag <kbd>tag_id</kbd> to recipe <kbd>reci_id</kbd></td>
+        <td>PUT</td>
+        <td>None</td>
+<td>
+
+```json
+{
+    "code": string,
+    "text": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/tags/{tag_id}</kbd><br>Removes tag <kbd>tag_id</kbd> from recipe <kbd>reci_id</kbd></td>
+        <td>DELETE</td>
+        <td>None</td>
+<td>
+
+```json
+{
+    "code": string,
+    "text": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/reviews</kbd><br>Get reviews for recipe <kbd>reci_id</kbd></td>
+        <td>GET</td>
+        <td>None</td>
+<td>
+
+```json
+[
+    {
+        "id": number,
+        "recipeId": number,
+        "userId": number,
+        "userDisplayName": string,
+        "numStars": number,
+        "comment": string
+    }
+]
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/reviews</kbd><br>Creates review for recipe <kbd>reci_id</kbd></td>
+        <td>POST</td>
+<td>
+
+```json
+{
+    "numStars": number,
+    "comment": string
+}
+```
+
+</td>
+<td>
+
+```json
+{
+    "id": number,
+    "recipeId": number,
+    "userId": number,
+    "userDisplayName": string,
+    "numStars": number,
+    "comment": string
+}
+```
+
+</td>
     </tr>
 </table>
 
 ### Storage Documentation
 
 Entity Relationship Diagram
+
 ![Entity Relationship Diagram](/documents/04-design-erd.drawio.png)
 
 ### Misc Documentation
