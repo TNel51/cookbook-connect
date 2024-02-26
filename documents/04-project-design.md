@@ -243,6 +243,10 @@ Block Diagram
 
 ### Component Diagram
 
+Component Diagram
+
+![Component Diagram](/documents/04-component-diagram.drawio.png)
+
 ### User Inteface Storyboard
 
 ### Message Documentation
@@ -498,7 +502,7 @@ Block Diagram
 </td>
     </tr>
     <tr>
-        <td><kbd>/ingredient</kbd><br>Create an ingredient</td>
+        <td><kbd>/ingredients</kbd><br>Create an ingredient</td>
         <td>POST</td>
 <td>
 
@@ -576,7 +580,7 @@ Block Diagram
 </td>
     </tr>
     <tr>
-        <td><kbd>/tag</kbd><br>Create a tag</td>
+        <td><kbd>/tags</kbd><br>Create a tag</td>
         <td>POST</td>
 <td>
 
@@ -630,7 +634,7 @@ Block Diagram
 </td>
     </tr>
     <tr>
-        <td><kbd>/recipes/{reci_id}/reviews</kbd><br>Get reviews for recipe <kbd>reci_id</kbd></td>
+        <td><kbd>/recipes/{reci_id}/ratings</kbd><br>Get ratings for recipe <kbd>reci_id</kbd></td>
         <td>GET</td>
         <td>None</td>
 <td>
@@ -651,7 +655,7 @@ Block Diagram
 </td>
     </tr>
     <tr>
-        <td><kbd>/recipes/{reci_id}/reviews</kbd><br>Creates review for recipe <kbd>reci_id</kbd></td>
+        <td><kbd>/recipes/{reci_id}/ratings</kbd><br>Creates a rating for recipe <kbd>reci_id</kbd></td>
         <td>POST</td>
 <td>
 
@@ -673,6 +677,30 @@ Block Diagram
     "userDisplayName": string,
     "numStars": number,
     "comment": string
+}
+```
+
+</td>
+    </tr>
+    <tr>
+        <td><kbd>/recipes/{reci_id}/ratings/{rati_id}</kbd><br>Creates a reaction for rating <kbd>rati_id</kbd> on recipe <kbd>reci_id</kbd></td>
+        <td>POST</td>
+<td>
+
+```json
+{
+    "liked": boolean
+}
+```
+
+</td>
+<td>
+
+```json
+{
+    "ratingId": number,
+    "userId": number,
+    "liked": boolean
 }
 ```
 
