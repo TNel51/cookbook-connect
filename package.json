@@ -6,15 +6,23 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "migration:generate": "typeorm-ts-node-esm migration:generate -d ormconfig.mjs ./migrations/Automigration",
+        "migration:run": "typeorm-ts-node-esm migration:run -d ormconfig.mjs",
+        "migration:revert": "typeorm-ts-node-esm migration:revert -d ormconfig.mjs"
     },
     "dependencies": {
+        "config": "^3.3.11",
         "next": "14.1.0",
+        "pg": "^8.11.3",
         "react": "^18",
-        "react-dom": "^18"
+        "react-dom": "^18",
+        "reflect-metadata": "^0.2.1",
+        "typeorm": "^0.3.20"
     },
     "devDependencies": {
-        "@types/node": "^20",
+        "@types/config": "^3.3.3",
+        "@types/node": "^20.11.26",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "@typescript-eslint/eslint-plugin": "^7.1.0",
@@ -25,6 +33,7 @@
         "eslint-plugin-simple-import-sort": "^12.0.0",
         "postcss": "^8",
         "tailwindcss": "^3.3.0",
+        "ts-node": "^10.9.2",
         "typescript": "^5"
     }
 }
