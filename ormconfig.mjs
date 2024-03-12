@@ -1,5 +1,4 @@
 import config from "config";
-import {join} from "path";
 import {DataSource} from "typeorm";
 
 export default new DataSource({
