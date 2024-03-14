@@ -1,29 +1,24 @@
 {
     "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "target": "ESNext",
         "lib": [
             "dom",
             "dom.iterable",
             "esnext",
-            "es2021",
+            "es2023",
             "esnext.asynciterable",
         ],
-        "target": "ES6",
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
         "noEmit": true,
         "esModuleInterop": true,
-        "module": "ESNext",
-        "moduleResolution": "Node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ]
-        },
         "experimentalDecorators": true,
         "noImplicitAny": false,
         "emitDecoratorMetadata": true,
@@ -31,12 +26,18 @@
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
         "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
     },
     "include": [
         "next-env.d.ts",
         "src/**/*.ts",
         "src/**/*.tsx",
-        "types/**/*.ts"
+        "types/**/*.ts",
+        "ormconfig.ts"
     ],
     "exclude": [
         "node_modules"
