@@ -1,31 +1,37 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "moduleResolution": "Node",
         "target": "ESNext",
         "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext",
-            "es2023",
-            "esnext.asynciterable",
+            "ESNext",
+            "ES2023",
+            "ESNext.AsyncIterable",
+            "DOM",
+            "DOM.Iterable"
         ],
-        "allowJs": true,
+        "noImplicitAny": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": false,
         "skipLibCheck": true,
+        "strictNullChecks": true,
         "strict": true,
+        "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "esModuleInterop": true,
+        "moduleResolution": "Node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-        "experimentalDecorators": true,
-        "noImplicitAny": false,
-        "emitDecoratorMetadata": true,
-        "strictPropertyInitialization": false,
-        "allowSyntheticDefaultImports": true,
-        "strictNullChecks": true,
-        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
         "paths": {
             "@/*": [
                 "./src/*"
@@ -37,7 +43,7 @@
         "src/**/*.ts",
         "src/**/*.tsx",
         "types/**/*.ts",
-        "ormconfig.ts"
+        "ormconfig.ts",
     ],
     "exclude": [
         "node_modules"
