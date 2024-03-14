@@ -1,7 +1,7 @@
 import config from "config";
 import {DataSource} from "typeorm";
 
-export default new DataSource({
+const dataSource = new DataSource({
     type: "postgres",
     host: config.get("database.host"),
     port: config.get("database.port"),
@@ -13,3 +13,5 @@ export default new DataSource({
     migrationsTableName: "migrations",
     migrations: ["migrations/*.ts"],
 });
+
+export default dataSource;
