@@ -22,7 +22,7 @@ export default function NavBar(): ReactElement {
     }, [avaDropRef, avaDropButtonRef, dropdown, session?.user]);
     
     return <div>
-        <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+        <nav className="bg-white dark:bg-gray-900 w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <Image className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/logo.svg" alt="Cookbook Connect Logo" height={32} width={32} />
