@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "GitHub.remotehub",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vsliveshare.vsliveshare"
+    ]
+}
