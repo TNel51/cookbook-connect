@@ -21,7 +21,8 @@
         "react": "^18",
         "react-dom": "^18",
         "reflect-metadata": "^0.2.1",
-        "typeorm": "^0.3.20"
+        "typeorm": "^0.3.20",
+        "zod": "^3.22.4"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
