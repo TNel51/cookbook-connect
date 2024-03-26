@@ -22,8 +22,8 @@ export class Ingredient extends BaseEntity {
     @Column()
     text: string;
 
-    @Column()
-    unit: string;
+    @Column({nullable: true})
+    unit?: string;
 
     @OneToMany(() => RecipeIngredient, ri => ri.ingredient)
     recipes: Relation<RecipeIngredient[]>;
