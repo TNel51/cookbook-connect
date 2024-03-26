@@ -21,6 +21,7 @@
         "react": "^18",
         "react-dom": "^18",
         "reflect-metadata": "^0.2.1",
+        "swr": "^2.2.5",
         "typeorm": "^0.3.20",
         "zod": "^3.22.4"
     },
