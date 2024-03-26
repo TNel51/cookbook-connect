@@ -15,6 +15,7 @@ export default function CreateRecipe(): ReactElement {
                     <option>Sanck</option>
                     <option>Appetizer</option>
                     <option>Meal</option>
+                    <option>Dessert</option>
                 </select>
 
                 <label htmlFor="difficulty" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Difficulty</label>
