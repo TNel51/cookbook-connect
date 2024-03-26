@@ -4,7 +4,7 @@ import {useSearchParams} from "next/navigation";
 import {getCsrfToken} from "next-auth/react";
 import React from "react";
 
-export default function SignIn({csrfToken}: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
+export default function SignIn({csrfToken}: InferGetServerSidePropsType<typeof getServerSideProps>): React.JSX.Element {
     const searchParams = useSearchParams();
     const error = searchParams.get("error");
     const isError = error === "CredentialsSignin";
