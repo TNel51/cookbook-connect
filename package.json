@@ -12,6 +12,7 @@
         "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d ormconfig.ts"
     },
     "dependencies": {
+        "@heroicons/react": "^2.1.3",
         "bcrypt": "^5.1.1",
         "config": "^3.3.11",
         "flowbite": "^2.3.0",
