@@ -1,6 +1,7 @@
 import {
     Column, Entity, ManyToOne,
     OneToMany,
+    Relation,
 } from "typeorm";
 
 import {BaseEntity} from "./base-entity";
@@ -11,13 +12,13 @@ import {User} from "./user.entity";
 @Entity()
 export class Rating extends BaseEntity {
     @ManyToOne(() => Recipe)
-    recipe: Recipe;
+    recipe: Relation<Recipe>;
 
     @Column()
     recipeId: number;
 
     @ManyToOne(() => User)
-    user: User;
+    user: Relation<User>;
 
     @Column()
     userId: number;
@@ -29,5 +30,5 @@ export class Rating extends BaseEntity {
     comment?: string;
 
     @OneToMany(() => RatingReaction, rr => rr.rating)
-    reactions: RatingReaction[];
+    reactions: Relation<RatingReaction[]>;
 }

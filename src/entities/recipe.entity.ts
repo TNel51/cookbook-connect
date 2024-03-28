@@ -1,6 +1,7 @@
 import {
     Column, Entity, JoinTable, ManyToMany, ManyToOne,
     OneToMany,
+    Relation,
 } from "typeorm";
 
 import {BaseEntity} from "./base-entity";
@@ -9,10 +10,16 @@ import {RecipeIngredient} from "./recipe-ingredient.entity";
 import {Tag} from "./tag.entity";
 import {User} from "./user.entity";
 
+export enum RecipeDifficulty {
+    Easy = "Easy",
+    Medium = "Medium",
+    Difficult = "Difficult",
+}
+
 @Entity()
 export class Recipe extends BaseEntity {
     @ManyToOne(() => User)
-    creator: User;
+    creator: Relation<User>;
 
     @Column()
     creatorId: number;
@@ -26,8 +33,8 @@ export class Recipe extends BaseEntity {
     @Column()
     category: string;
 
-    @Column()
-    difficulty: string;
+    @Column({type: "enum", enum: RecipeDifficulty})
+    difficulty: RecipeDifficulty;
 
     @Column()
     instructions: string;
@@ -37,11 +44,11 @@ export class Recipe extends BaseEntity {
 
     @ManyToMany(() => Tag, t => t.recipes)
     @JoinTable()
-    tags: Tag[];
+    tags: Relation<Tag[]>;
 
     @OneToMany(() => Rating, r => r.recipe)
-    ratings: Rating[];
+    ratings: Relation<Rating[]>;
 
     @OneToMany(() => RecipeIngredient, ri => ri.recipe)
-    ingredients: RecipeIngredient[];
+    ingredients: Relation<RecipeIngredient[]>;
 }

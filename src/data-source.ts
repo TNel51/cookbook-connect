@@ -1,8 +1,16 @@
+import "reflect-metadata";
+
 import config from "config";
 import type {EntityTarget, SelectQueryBuilder} from "typeorm";
 import {DataSource as ORMDataSource} from "typeorm";
 
 import type {BaseEntity} from "./entities/base-entity";
+import {Ingredient} from "./entities/ingredient.entity";
+import {Rating} from "./entities/rating.entity";
+import {RatingReaction} from "./entities/rating-reaction.entity";
+import {Recipe} from "./entities/recipe.entity";
+import {RecipeIngredient} from "./entities/recipe-ingredient.entity";
+import {Tag} from "./entities/tag.entity";
 import {User} from "./entities/user.entity";
 
 export const DataSource = new ORMDataSource({
@@ -13,7 +21,7 @@ export const DataSource = new ORMDataSource({
     password: config.get("database.password"),
     database: config.get("database.database"),
     schema: "public",
-    entities: [User],
+    entities: [Ingredient, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, User],
 });
 
 export async function ReadyDataSource(): Promise<ORMDataSource> {
