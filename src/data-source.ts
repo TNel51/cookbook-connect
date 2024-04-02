@@ -11,6 +11,7 @@ import {RatingReaction} from "./entities/rating-reaction.entity";
 import {Recipe} from "./entities/recipe.entity";
 import {RecipeIngredient} from "./entities/recipe-ingredient.entity";
 import {Tag} from "./entities/tag.entity";
+import {Tool} from "./entities/tool.entity";
 import {User} from "./entities/user.entity";
 
 export const DataSource = new ORMDataSource({
@@ -21,7 +22,7 @@ export const DataSource = new ORMDataSource({
     password: config.get("database.password"),
     database: config.get("database.database"),
     schema: "public",
-    entities: [Ingredient, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, User],
+    entities: [Ingredient, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, Tool, User],
 });
 
 export async function ReadyDataSource(): Promise<ORMDataSource> {
