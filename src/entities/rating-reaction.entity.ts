@@ -19,8 +19,8 @@ export class RatingReaction extends BaseEntity {
     user: Relation<User>;
 
     @Column()
-    name: string;
+    userId: number;
 
     @Column()
-    liked: true;
+    liked: boolean;
 }
