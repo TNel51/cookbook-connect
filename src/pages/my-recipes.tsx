@@ -50,7 +50,7 @@ export default function MyRecipes(): ReactElement {
             <button type="button" className="mb-2 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete Recipe</button>
             <br></br>
 
-            <Recipe name={"Back potatoe"} description={"potatoe and cheese"} imgUrl={"/image-missing.svg"}/>
+            <Recipe name={"Baked potatoe"} description={"potatoe and cheese"} imgUrl={"/image-missing.svg"}/>
             <button type="button" className="mb-2 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Export Recipe</button>
             <button type="button" className="mb-2 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete Recipe</button>
         </RecipeList>

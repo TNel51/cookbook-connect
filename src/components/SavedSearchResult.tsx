@@ -1,8 +1,17 @@
 import React from "react";
 
-const SavedRecipeComponent = ({
-    title, description, onDoubleClick,
-}) => (
+// Define an interface for the component's props
+interface SavedRecipeComponentProps {
+    title: string;
+    description: string;
+    onDoubleClick: () => void; // Adjust this type according to the expected signature of the onDoubleClick function
+}
+
+const SavedRecipeComponent: React.FC<SavedRecipeComponentProps> = ({
+    title,
+    description,
+    onDoubleClick,
+}): React.JSX.Element => (
     <div
         onDoubleClick={onDoubleClick}
         className="cursor-pointer bg-white dark:bg-gray-700 shadow rounded-lg p-4 mb-4"
