@@ -21,7 +21,7 @@ export default function Register(): ReactElement {
         // Handle the sign-in logic here
     };
 
-    return <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
+    return <main className={`flex min-h-screen flex-col items-center justify-between p-24`}>
         <div className="flex items-center justify-center min-h-screen">
             <div className="w-full max-w-sm p-6 m-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 shadow-md sm:p-8 dark:border-gray-700">
                 <h5 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create Account</h5>
