@@ -26,6 +26,7 @@ export enum RecipeCategory {
     Appetizer = "Appetizer",
     Meal = "Meal",
     Dessert = "Dessert",
+    Side = "Side",
 }
 
 @Entity("recipe")

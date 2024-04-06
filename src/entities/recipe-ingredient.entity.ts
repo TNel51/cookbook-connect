@@ -7,16 +7,6 @@ import {BaseEntity} from "./base-entity";
 import {Ingredient} from "./ingredient.entity";
 import {Recipe} from "./recipe.entity";
 
-export enum Unit {
-    None = "",
-    Teaspoon = "tsp.",
-    Tablespoon = "tbsp.",
-    FluidOunce = "fl oz",
-    Cup = "cup",
-    Pound = "lb",
-    Ounce = "oz",
-}
-
 @Entity("recipe_ingredient")
 export class RecipeIngredient extends BaseEntity {
     @ManyToOne(() => Recipe)
@@ -32,10 +22,7 @@ export class RecipeIngredient extends BaseEntity {
     ingredientId: number;
 
     @Column()
-    quantity: number;
-
-    @Column({nullable: true})
-    unit?: string;
+    quantity: string;
 
     @Column()
     required: boolean;

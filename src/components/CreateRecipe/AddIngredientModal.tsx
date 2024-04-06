@@ -23,10 +23,10 @@ export default function AddIngredientModal({addIngredient, currentIngredients}: 
 
     const createIngredient = async (text: string): Promise<void> => {
         await axios.post<Ingredient>(`/api/ingredients`, {text}).then(async res => {
-            toast(`Created new ingredient: ${res.data.text}`, {type: "success"});
+            toast.success(`Created new ingredient: ${res.data.text}`);
             await mutateIngredients();
         })
-            .catch(() => { toast("Failed to create ingredient!", {type: "error"}) });
+            .catch(() => { toast.error("Failed to create ingredient!") });
     };
 
     return <div id="ingredientsModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full bg-black/50">
