@@ -1,9 +1,10 @@
+import type {ReactElement} from "react";
 import React from "react";
 
 import SavedRecipeComponent from "../components/SavedSearchResult";
 import SearchComponent from "../components/Search"; // Assuming this is the file name of your search component
 
-const MyRecipesPage = () => {
+const MyRecipesPage = (): ReactElement => {
     // Example recipes data
     const recipes = [
         {title: "Recipe 1", description: "This is a description for Recipe 1."},
@@ -12,7 +13,9 @@ const MyRecipesPage = () => {
     // ...other recipes
     ];
 
-    const handleDoubleClick = title => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleDoubleClick = (): void => {
+        // eslint-disable-next-line no-console
         console.log("Recipe was clicked");
     // Here you can add your logic to navigate to the recipe details page
     };

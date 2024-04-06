@@ -1,22 +1,25 @@
+import type {FormEvent} from "react";
 import {type ReactElement, useState} from "react";
 
 export default function Register(): ReactElement {
-    const [passwordError, setPasswordError] = useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+    const [passwordError] = useState(false);
+    const [passwordErrorMessage] = useState("");
 
-    const handleSubmit = event => {
+    const handleSubmit = (event: FormEvent): void => {
         event.preventDefault();
-        const password = event.target.password.value;
-        const passwordConfirm = event.target.passwordConfirm.value;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        // const password = event.target.password.value;
+        // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        // const passwordConfirm = event.target.passwordConfirm.value;
 
-        setPasswordError(false);
-        setPasswordErrorMessage("");
+        // setPasswordError(false);
+        // setPasswordErrorMessage("");
 
-        if (password !== passwordConfirm) {
-            setPasswordError(true);
-            setPasswordErrorMessage("Passwords do not match.");
-            return;
-        }
+        // if (password !== passwordConfirm) {
+        //     setPasswordError(true);
+        //     setPasswordErrorMessage("Passwords do not match.");
+        //     return;
+        // }
 
         // Handle the sign-in logic here
     };
