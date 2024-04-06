@@ -15,7 +15,7 @@ export class Tag extends BaseEntity {
     @Column()
     creatorId: number;
 
-    @Column()
+    @Column({unique: true})
     code: string;
 
     @ManyToMany(() => Recipe, r => r.tags)

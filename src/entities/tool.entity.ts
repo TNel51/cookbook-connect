@@ -14,10 +14,7 @@ export class Tool extends BaseEntity {
     @Column()
     creatorId: number;
 
-    @Column()
-    code: string;
-
-    @Column()
+    @Column({unique: true})
     text: string;
 
     @ManyToMany(() => Recipe, r => r.tools)

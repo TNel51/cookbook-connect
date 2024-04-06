@@ -15,3 +15,5 @@ export class BaseEntity {
     @DeleteDateColumn()
     deletedAt: Date;
 }
+
+export type BaseEntityFields = "id" | "createdAt" | "updatedAt" | "deletedAt";

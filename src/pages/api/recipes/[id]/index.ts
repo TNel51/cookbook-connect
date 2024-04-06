@@ -3,14 +3,16 @@ import {getServerSession} from "next-auth";
 import {z} from "zod";
 
 import {ReadyDataSource} from "@/data-source";
-import {Recipe, RecipeDifficulty} from "@/entities/recipe.entity";
+import {
+    Recipe, RecipeCategory, RecipeDifficulty,
+} from "@/entities/recipe.entity";
 
 import {authOptions} from "../../auth/[...nextauth]";
 
 const PatchBodySchema = z.object({
     public: z.boolean(),
     title: z.string(),
-    category: z.string(),
+    category: z.nativeEnum(RecipeCategory),
     difficulty: z.nativeEnum(RecipeDifficulty),
     instructions: z.string(),
     time: z.string(),

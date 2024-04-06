@@ -17,13 +17,7 @@ export class Ingredient extends BaseEntity {
     creatorId: number;
 
     @Column({unique: true})
-    code: string;
-
-    @Column()
     text: string;
-
-    @Column({nullable: true})
-    unit?: string;
 
     @OneToMany(() => RecipeIngredient, ri => ri.ingredient)
     recipes: Relation<RecipeIngredient[]>;

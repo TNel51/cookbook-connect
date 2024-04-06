@@ -2,8 +2,10 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import {getServerSession} from "next-auth";
 import {z} from "zod";
 
-import {ReadyDataSource, similarityBuilder} from "@/data-source";
-import {Ingredient} from "@/entities/ingredient.entity";
+import {
+    ReadyDataSource, similarityBuilder,
+} from "@/data-source";
+import {Tool} from "@/entities/tool.entity";
 
 import {titleCase} from "../../../lib/titleCase";
 import {authOptions} from "../auth/[...nextauth]";
@@ -18,10 +20,10 @@ const PostBodySchema = z.object({
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Ingredient[] | Ingredient | string>,
+    res: NextApiResponse<Tool[] | Tool | string>,
 ): Promise<void> {
     const ds = await ReadyDataSource();
-    const ingredientRepo = ds.getRepository(Ingredient);
+    const toolRepo = ds.getRepository(Tool);
 
     if (req.method === "GET") {
         const getInput = GetQuerySchema.safeParse(req.query);
@@ -32,14 +34,14 @@ export default async function handler(
         }
 
         if (getInput.data.key) {
-            const ingredientsBuilder = await similarityBuilder(Ingredient, getInput.data.key, "text", 0.2, 10);
-            ingredientsBuilder.orWhere(`${Ingredient.constructor.name}.text ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
-            const ingredients = await ingredientsBuilder.getMany();
+            const toolsBuilder = await similarityBuilder(Tool, getInput.data.key, "text", 0.2, 10);
+            toolsBuilder.orWhere(`${Tool.constructor.name}.text ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
+            const tools = await toolsBuilder.getMany();
     
-            res.status(200).json(ingredients);
+            res.status(200).json(tools);
         } else {
-            const ingredients = await ingredientRepo.find({take: 20});
-            res.status(200).json(ingredients);
+            const tools = await toolRepo.find({take: 20});
+            res.status(200).json(tools);
         }
     } else if (req.method === "POST") {
         const session = await getServerSession(req, res, authOptions);
@@ -56,13 +58,13 @@ export default async function handler(
             return;
         }
 
-        const ingredient = ingredientRepo.create({
+        const tool = toolRepo.create({
             creatorId: session.user.id,
             text: titleCase(postInput.data.text),
         });
-        await ingredientRepo.save(ingredient);
+        await toolRepo.save(tool);
 
-        res.status(200).json(ingredient);
+        res.status(200).json(tool);
     } else {
         res.status(405).send("Method Not Allowed");
     }

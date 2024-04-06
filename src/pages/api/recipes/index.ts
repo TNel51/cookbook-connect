@@ -1,8 +1,11 @@
 import type {NextApiRequest, NextApiResponse} from "next";
+import {getServerSession} from "next-auth";
 import {z} from "zod";
 
 import {ReadyDataSource} from "@/data-source";
 import {Recipe} from "@/entities/recipe.entity";
+
+import {authOptions} from "../auth/[...nextauth]";
 
 const GetQuerySchema = z.object({
     take: z.string(),
@@ -40,6 +43,13 @@ export default async function handler(
 
         res.status(200).json({total: totalRecipes, recipes: recipes});
     } else if (req.method === "POST") {
+        const session = await getServerSession(req, res, authOptions);
+
+        if (!session?.user) {
+            res.status(400).end("Unauthenticated");
+            return;
+        }
+
         const postInput = PostBodySchema.safeParse(req.body);
 
         if (!postInput.success) {
