@@ -7,7 +7,7 @@ import {BaseEntity} from "./base-entity";
 import {Recipe} from "./recipe.entity";
 import {User} from "./user.entity";
 
-@Entity()
+@Entity("tag")
 export class Tag extends BaseEntity {
     @ManyToOne(() => User)
     creator: Relation<User>;

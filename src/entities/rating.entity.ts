@@ -9,7 +9,7 @@ import {RatingReaction} from "./rating-reaction.entity";
 import {Recipe} from "./recipe.entity";
 import {User} from "./user.entity";
 
-@Entity()
+@Entity("rating")
 export class Rating extends BaseEntity {
     @ManyToOne(() => Recipe)
     recipe: Relation<Recipe>;

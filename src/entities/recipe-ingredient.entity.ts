@@ -17,7 +17,7 @@ export enum Unit {
     Ounce = "oz",
 }
 
-@Entity()
+@Entity("recipe_ingredient")
 export class RecipeIngredient extends BaseEntity {
     @ManyToOne(() => Recipe)
     recipe: Relation<Recipe>;

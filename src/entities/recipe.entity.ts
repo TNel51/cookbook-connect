@@ -28,7 +28,7 @@ export enum RecipeCategory {
     Dessert = "Dessert",
 }
 
-@Entity()
+@Entity("recipe")
 export class Recipe extends BaseEntity {
     @ManyToOne(() => User)
     creator: Relation<User>;
