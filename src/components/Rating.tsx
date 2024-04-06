@@ -8,7 +8,7 @@ export default function Rating({rating}: {rating: RatingEntity;}): ReactElement 
         <div className="flex items-center mb-4">
             <img className="w-10 h-10 me-4 rounded-full" src="/image-missing.svg" alt=""/>
             <div className="font-medium dark:text-white">
-                <p>{rating.user.displayName} <time dateTime={rating.user.createdAt.toISOString()} className="block text-sm text-gray-500 dark:text-gray-400">Joined on {format(rating.user.createdAt.toISOString(), "MMMM d, yyyy")}</time></p>
+                <p>{rating.user.displayName} <time dateTime={rating.user.createdAt.toISOString()} className="block text-sm text-gray-500 dark:text-gray-400">Joined on {format(rating.user.createdAt, "MMMM d, yyyy")}</time></p>
             </div>
         </div>
         <div className="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
@@ -22,7 +22,7 @@ export default function Rating({rating}: {rating: RatingEntity;}): ReactElement 
             </svg>)}
             
         </div>
-        <footer className="mb-2 text-sm text-gray-500 dark:text-gray-400"><p><time dateTime={rating.createdAt.toISOString()}>{format(rating.createdAt.toISOString(), "MMMM d, yyyy")}</time></p></footer>
+        <footer className="mb-2 text-sm text-gray-500 dark:text-gray-400"><p><time dateTime={rating.createdAt.toISOString()}>{format(rating.createdAt, "MMMM d, yyyy")}</time></p></footer>
         {rating.comment && <p className="mb-2 text-gray-500 dark:text-gray-400">{rating.comment}</p>}
         <aside>
             <div className="flex content-center mt-1 text-xs text-gray-500 dark:text-gray-400">
