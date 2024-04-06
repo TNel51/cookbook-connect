@@ -1,6 +1,5 @@
 import "reflect-metadata";
 
-import config from "config";
 import type {EntityTarget, SelectQueryBuilder} from "typeorm";
 import {DataSource as ORMDataSource} from "typeorm";
 
@@ -14,13 +13,19 @@ import {Tag} from "./entities/tag.entity";
 import {Tool} from "./entities/tool.entity";
 import {User} from "./entities/user.entity";
 
+if (process.env.DATABASE_HOST === undefined) throw Error("Failed to load DATABASE_HOST env variable");
+if (process.env.DATABASE_PORT === undefined) throw Error("Failed to load DATABASE_PORT env variable");
+if (process.env.DATABASE_USERNAME === undefined) throw Error("Failed to load DATABASE_USERNAME env variable");
+if (process.env.DATABASE_PASSWORD === undefined) throw Error("Failed to load DATABASE_PASSWORD env variable");
+if (process.env.DATABASE_DATABASE === undefined) throw Error("Failed to load DATABASE_DATABASE env variable");
+
 export const DataSource = new ORMDataSource({
     type: "postgres",
-    host: config.get("database.host"),
-    port: config.get("database.port"),
-    username: config.get("database.username"),
-    password: config.get("database.password"),
-    database: config.get("database.database"),
+    host: process.env.DATABASE_HOST,
+    port: parseInt(process.env.DATABASE_PORT),
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DATABASE,
     schema: "public",
     entities: [Ingredient, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, Tool, User],
 });
