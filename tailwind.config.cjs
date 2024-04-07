@@ -1,9 +1,10 @@
 const config = {
-    darkMode: 'media',
+    darkMode: "media",
     content: [
         "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
         extend: {
@@ -15,6 +16,6 @@ const config = {
         },
     },
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    plugins: [require("flowbite/plugin")],
+    plugins: [require("flowbite/plugin"), require("@tailwindcss/typography")],
 };
 export default config;
