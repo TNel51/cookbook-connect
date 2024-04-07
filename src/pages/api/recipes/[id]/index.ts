@@ -7,6 +7,7 @@ import {
     Recipe, RecipeCategory, RecipeDifficulty,
 } from "@/entities/recipe.entity";
 
+import {includeAll} from "../../../../lib/includeAll";
 import {authOptions} from "../../auth/[...nextauth]";
 
 const PatchBodySchema = z.object({
@@ -32,7 +33,18 @@ export default async function handler(
     const ds = await ReadyDataSource();
     const recipeRepo = ds.getRepository(Recipe);
 
-    let recipe = await recipeRepo.findOne({where: {id: parseInt(id)} });
+    let recipe = await recipeRepo.findOne({
+        where: {id: parseInt(id)},
+        relations: {
+            creator: true,
+            tags: true,
+            ingredients: {
+                ingredient: true,
+            },
+            tools: true,
+        },
+        select: includeAll(recipeRepo),
+    });
 
     if (!recipe) {
         res.status(404).end("Recipe not found");

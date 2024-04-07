@@ -27,7 +27,8 @@
         "reflect-metadata": "^0.2.1",
         "swr": "^2.2.5",
         "typeorm": "^0.3.20",
-        "zod": "^3.22.4"
+        "zod": "^3.22.4",
+        "react-native-sqlite-storage": "file:./shims/react-native-sqlite-storage"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",

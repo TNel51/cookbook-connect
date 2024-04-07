@@ -6,6 +6,7 @@ import {
     ManyToOne,
     OneToMany,
     Relation,
+    VirtualColumn,
 } from "typeorm";
 
 import {BaseEntity} from "./base-entity";
@@ -43,6 +44,9 @@ export class Recipe extends BaseEntity {
     @Column()
     title: string;
 
+    @Column()
+    description: string;
+
     @Column({type: "enum", enum: RecipeCategory})
     category: RecipeCategory;
 
@@ -54,6 +58,9 @@ export class Recipe extends BaseEntity {
 
     @Column()
     time: string;
+
+    @VirtualColumn({query: alias => `SELECT COALESCE(AVG("rating"."numStars"), 0) FROM "rating" WHERE "recipeId"=${alias}.id`})
+    numStars: number;
 
     @ManyToMany(() => Tag, t => t.recipes)
     @JoinTable()

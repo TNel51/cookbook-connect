@@ -40,7 +40,7 @@ export default async function handler(
     
             res.status(200).json(tools);
         } else {
-            const tools = await toolRepo.find({take: 20});
+            const tools = await toolRepo.find({take: 10});
             res.status(200).json(tools);
         }
     } else if (req.method === "POST") {

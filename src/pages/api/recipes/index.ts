@@ -11,25 +11,36 @@ import {RecipeIngredient} from "@/entities/recipe-ingredient.entity";
 import {Tool} from "@/entities/tool.entity";
 import {runTransaction} from "@/lib/runTransaction";
 
+import {Tag} from "../../../entities/tag.entity";
+import {includeAll} from "../../../lib/includeAll";
 import {authOptions} from "../auth/[...nextauth]";
 
 const GetQuerySchema = z.object({
+    mine: z.enum(["true", "false"]).optional(),
     take: z.string(),
     skip: z.string(),
+    category: z.nativeEnum(RecipeCategory).optional(),
+    difficulty: z.nativeEnum(RecipeDifficulty).optional(),
 }).strict()
-    .transform(({take, skip}) => ({
+    .transform(({
+        mine, take, skip, category, difficulty,
+    }) => ({
+        mine: mine === "true",
         take: parseInt(take),
         skip: parseInt(skip),
+        category: category,
+        difficulty: difficulty,
     }));
 
 const PostBodySchema = z.object({
     public: z.boolean(),
     title: z.string(),
+    description: z.string(),
     category: z.nativeEnum(RecipeCategory),
     difficulty: z.nativeEnum(RecipeDifficulty),
     instructions: z.string(),
     time: z.string(),
-    tags: z.array(z.string()),
+    tags: z.array(z.number()),
     tools: z.array(z.number()),
     ingredients: z.array(z.object({
         ingredientId: z.number(),
@@ -53,15 +64,50 @@ export default async function handler(
             return;
         }
 
-        const [recipes, totalRecipes] = await recipeRepo.findAndCount({
-            take: getInput.data.take,
-            skip: getInput.data.skip,
-            where: {
-                public: true,
-            },
-        });
+        if (getInput.data.mine) {
+            const session = await getServerSession(req, res, authOptions);
 
-        res.status(200).json({total: totalRecipes, recipes: recipes});
+            if (!session?.user) {
+                res.status(400).end("Unauthenticated");
+                return;
+            }
+        
+            const [recipes, totalRecipes] = await recipeRepo.findAndCount({
+                take: getInput.data.take,
+                skip: getInput.data.skip,
+                where: {
+                    creatorId: session.user.id,
+                    category: getInput.data.category,
+                    difficulty: getInput.data.difficulty,
+                },
+                relations: {
+                    creator: true,
+                    tags: true,
+                    ingredients: true,
+                    tools: true,
+                },
+                select: includeAll(recipeRepo),
+            });
+    
+            res.status(200).json({total: totalRecipes, recipes: recipes});
+        } else {
+            const [recipes, totalRecipes] = await recipeRepo.findAndCount({
+                take: getInput.data.take,
+                skip: getInput.data.skip,
+                where: {
+                    public: true,
+                },
+                relations: {
+                    creator: true,
+                    tags: true,
+                    ingredients: true,
+                    tools: true,
+                },
+                select: includeAll(recipeRepo),
+            });
+    
+            res.status(200).json({total: totalRecipes, recipes: recipes});
+        }
     } else if (req.method === "POST") {
         const session = await getServerSession(req, res, authOptions);
 
@@ -74,24 +120,23 @@ export default async function handler(
 
         if (!postInput.success) {
             res.status(400).send("Invalid Input Data");
-            console.log(req.body);
-            console.error(postInput.error);
             return;
         }
 
         const newRecipe = await runTransaction(async (em: EntityManager) => {
-            console.log(postInput);
             const recipe = em.create(Recipe, {
                 creatorId: session.user.id,
                 public: postInput.data.public,
                 title: postInput.data.title,
+                description: postInput.data.description,
                 category: postInput.data.category,
                 difficulty: postInput.data.difficulty,
                 instructions: postInput.data.instructions,
                 time: postInput.data.time,
             });
 
-            // Tags!
+            const tags = await em.find(Tag, {where: {id: In(postInput.data.tags)} });
+            recipe.tags = tags;
 
             const tools = await em.find(Tool, {where: {id: In(postInput.data.tools)} });
             recipe.tools = tools;
@@ -102,8 +147,6 @@ export default async function handler(
                 const recipeIngredient = em.create(RecipeIngredient, {recipeId: recipe.id, ...ingredient});
                 await em.save(recipeIngredient);
             }
-
-            // throw new Error("stop!");
 
             return recipe;
         });

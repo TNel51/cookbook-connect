@@ -8,14 +8,17 @@ import type {RecipeCategory, RecipeDifficulty} from "@/entities/recipe.entity";
 import {type Recipe} from "@/entities/recipe.entity";
 
 import AddIngredientModal from "../components/CreateRecipe/AddIngredientModal";
+import AddTagModal from "../components/CreateRecipe/AddTagModel";
 import AddToolModal from "../components/CreateRecipe/AddToolModal";
 import type {BaseEntityFields} from "../entities/base-entity";
 import type {Ingredient} from "../entities/ingredient.entity";
 import type {RecipeIngredient} from "../entities/recipe-ingredient.entity";
+import type {Tag} from "../entities/tag.entity";
 import type {Tool} from "../entities/tool.entity";
 
 export default function CreateRecipe(): ReactElement {
     const [title, setTitle] = useState<string>();
+    const [description, setDescription] = useState<string>();
     const [category, setCategory] = useState<RecipeCategory>();
     const [difficulty, setDifficulty] = useState<RecipeDifficulty>();
     const [instructions, setInstructions] = useState<string>();
@@ -23,6 +26,7 @@ export default function CreateRecipe(): ReactElement {
 
     const [tools, setTools] = useState<Tool[]>([]);
     const [ingredients, setIngredients] = useState<Array<Omit<RecipeIngredient, BaseEntityFields | "recipe" | "recipeId">>>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     
     const createRecipe = (e: FormEvent): void => {
@@ -32,11 +36,12 @@ export default function CreateRecipe(): ReactElement {
         axios.post<Recipe>(`/api/recipes`, {
             public: false,
             title: title,
+            description: description,
             category: category,
             difficulty: difficulty,
             instructions: instructions,
             time: time,
-            tags: [],
+            tags: tags.map(t => t.id),
             tools: tools.map(t => t.id),
             ingredients: ingredients,
         }).then(async res => {
@@ -65,6 +70,18 @@ export default function CreateRecipe(): ReactElement {
                                 placeholder="Type recipe title"
                                 value={title}
                                 onChange={e => { setTitle(e.target.value) }}
+                                required
+                            />
+                        </div>
+                        <div className="sm:col-span-2">
+                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                            <textarea
+                                id="description"
+                                rows={4}
+                                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Make dough. Bake. Enjoy!"
+                                value={description}
+                                onChange={e => { setDescription(e.target.value) }}
                                 required
                             />
                         </div>
@@ -108,7 +125,7 @@ export default function CreateRecipe(): ReactElement {
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className="px-6 py-3 flex justify-between">
+                                        <th className="px-6 py-3 flex justify-between">
                                             <div className="my-auto">Tools</div>
                                             <button type="button" data-modal-target="toolsModal" data-modal-toggle="toolsModal">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
@@ -143,10 +160,10 @@ export default function CreateRecipe(): ReactElement {
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className="px-6 py-3">
+                                        <th className="px-6 py-3">
                                             <div className="my-auto">Ingredient</div>
                                         </th>
-                                        <th scope="col" className="px-6 py-3 flex justify-between">
+                                        <th className="px-6 py-3 flex justify-between">
                                             <div className="my-auto">Quantity</div>
                                             <button type="button" data-modal-target="ingredientsModal" data-modal-toggle="ingredientsModal">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
@@ -199,9 +216,9 @@ export default function CreateRecipe(): ReactElement {
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className="px-6 py-3 flex justify-between">
+                                        <th className="px-6 py-3 flex justify-between">
                                             <div className="my-auto">Tags</div>
-                                            <button type="button">
+                                            <button type="button" data-modal-target="tagsModal" data-modal-toggle="tagsModal">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
@@ -210,26 +227,23 @@ export default function CreateRecipe(): ReactElement {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
-                                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex justify-between">
-                                            <div className="my-auto">Japanese</div>
-                                            <button type="button">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-400">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
-                                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex justify-between">
-                                            <div className="my-auto">Delicacy</div>
-                                            <button type="button">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-400">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    {tags.length
+                                        ? tags.map(tag => <tr key={tag.id} className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
+                                            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex justify-between">
+                                                <div className="my-auto">{tag.code}</div>
+                                                <button type="button" onClick={() => { setTags(tags.filter(t => t.id !== tag.id)) }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-400">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>)
+                                        : <tr className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
+                                                <td className="px-6 py-4 font-medium text-gray-400 whitespace-nowrap flex justify-between">
+                                                    <div className="my-auto italic">There aren&apos;t any tags. Add some!</div>
+                                                </td>
+                                            </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -269,5 +283,6 @@ export default function CreateRecipe(): ReactElement {
                 ingredient: ingredient, ingredientId: ingredient.id, quantity: "", required: true,
             } ]);
         }} currentIngredients={ingredients.map(i => i.ingredient)} />
+        <AddTagModal addTag={(tag: Tag) => { if (!tags.some(t => t.id === tag.id)) setTags([...tags, tag]); }} currentTags={tags} />
     </>;
 }

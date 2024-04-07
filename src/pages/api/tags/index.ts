@@ -2,10 +2,11 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import {getServerSession} from "next-auth";
 import {z} from "zod";
 
-import {ReadyDataSource, similarityBuilder} from "@/data-source";
-import {Ingredient} from "@/entities/ingredient.entity";
+import {
+    ReadyDataSource, similarityBuilder,
+} from "@/data-source";
+import {Tag} from "@/entities/tag.entity";
 
-import {titleCase} from "../../../lib/titleCase";
 import {authOptions} from "../auth/[...nextauth]";
 
 const GetQuerySchema = z.object({
@@ -13,15 +14,15 @@ const GetQuerySchema = z.object({
 }).strict();
 
 const PostBodySchema = z.object({
-    text: z.string(),
+    code: z.string(),
 }).strict();
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Ingredient[] | Ingredient | string>,
+    res: NextApiResponse<Tag[] | Tag | string>,
 ): Promise<void> {
     const ds = await ReadyDataSource();
-    const ingredientRepo = ds.getRepository(Ingredient);
+    const tagRepo = ds.getRepository(Tag);
 
     if (req.method === "GET") {
         const getInput = GetQuerySchema.safeParse(req.query);
@@ -32,14 +33,14 @@ export default async function handler(
         }
 
         if (getInput.data.key) {
-            const ingredientsBuilder = await similarityBuilder(Ingredient, getInput.data.key, "text", 0.2, 10);
-            ingredientsBuilder.orWhere(`${Ingredient.constructor.name}.text ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
-            const ingredients = await ingredientsBuilder.getMany();
+            const tagsBuilder = await similarityBuilder(Tag, getInput.data.key, "code", 0.2, 10);
+            tagsBuilder.orWhere(`${Tag.constructor.name}.code ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
+            const tags = await tagsBuilder.getMany();
     
-            res.status(200).json(ingredients);
+            res.status(200).json(tags);
         } else {
-            const ingredients = await ingredientRepo.find({take: 10});
-            res.status(200).json(ingredients);
+            const tags = await tagRepo.find({take: 10});
+            res.status(200).json(tags);
         }
     } else if (req.method === "POST") {
         const session = await getServerSession(req, res, authOptions);
@@ -56,13 +57,13 @@ export default async function handler(
             return;
         }
 
-        const ingredient = ingredientRepo.create({
+        const tag = tagRepo.create({
             creatorId: session.user.id,
-            text: titleCase(postInput.data.text),
+            code: postInput.data.code.toLowerCase().replaceAll(/[^a-zA-Z0-9 ]/g, ""),
         });
-        await ingredientRepo.save(ingredient);
+        await tagRepo.save(tag);
 
-        res.status(200).json(ingredient);
+        res.status(200).json(tag);
     } else {
         res.status(405).send("Method Not Allowed");
     }
