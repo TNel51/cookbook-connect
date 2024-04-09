@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import {useParams} from "next/navigation";
 import type {FormEvent} from "react";
 import {type ReactElement, useState} from "react";
@@ -108,7 +109,7 @@ export default function Recipe(): ReactElement {
         </table>
         <div>
             <label className="font-bold">Instructions</label>
-            <div>{recipe.instructions}</div>
+            <div className="prose dark:prose-invert prose-sm" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(recipe.instructions)}} />
         </div>
         <form className="space-y-2" onSubmit={createRating}>
             <label className="font-bold">Rate this Recipe</label>
@@ -132,9 +133,7 @@ export default function Recipe(): ReactElement {
                 Submit Rating
             </button>
         </form>
-        
         <div className="relative z-0 w-full mb-5 group">
-            
             <div className="grid gap-4">
                 <Rating rating={{
                     user: {

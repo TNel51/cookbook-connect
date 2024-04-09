@@ -1,10 +1,12 @@
 import Color from "@tiptap/extension-color";
+import Placeholder from "@tiptap/extension-placeholder";
 import TextStyle from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import type {AxiosError} from "axios";
 import axios from "axios";
+import {useRouter} from "next/router";
 import type {FormEvent} from "react";
 import {
     type ReactElement, useState,
@@ -24,11 +26,12 @@ import type {Tag} from "../entities/tag.entity";
 import type {Tool} from "../entities/tool.entity";
 
 export default function CreateRecipe(): ReactElement {
+    const router = useRouter();
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
     const [category, setCategory] = useState<RecipeCategory>();
     const [difficulty, setDifficulty] = useState<RecipeDifficulty>();
-    const [instructions] = useState<string>();
+    const [instructions, setInstructions] = useState<string>();
     const [time, setTime] = useState<string>();
 
     const [tools, setTools] = useState<Tool[]>([]);
@@ -42,13 +45,18 @@ export default function CreateRecipe(): ReactElement {
             Underline.configure(),
             TextStyle,
             Color,
+            Placeholder.configure({
+                emptyEditorClass: "is-editor-empty",
+                placeholder: "Write some instructions!",
+            }),
         ],
         editorProps: {
             attributes: {
                 class: "prose dark:prose-invert w-full max-w-full prose-sm mx-auto focus:outline-none",
             },
         },
-        content: "Write some instructions here!",
+        content: instructions,
+        onUpdate: e => { setInstructions(e.editor.getHTML()) },
     });
     
     const createRecipe = (e: FormEvent): void => {
@@ -68,7 +76,7 @@ export default function CreateRecipe(): ReactElement {
             ingredients: ingredients,
         }).then(async res => {
             toast.success(`Created new recipe: ${res.data.title}`);
-            // Redirect
+            await router.push(`/recipes/${res.data.id}`);
         })
             .catch((error: AxiosError): void => {
                 toast.error(error.response?.data ? `Failed to create recipe: ${error.response.data as string}` : `Failed to create recipe.`);
