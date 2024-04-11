@@ -25,21 +25,27 @@ export default function NavBar(): ReactElement {
         <nav className="bg-white dark:bg-gray-900 w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <Image className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/logo.svg" alt="Cookbook Connect Logo" height={32} width={32} />
+                    <Image className="w-8 h-8 rounded-full dark:invert" src="/logo.svg" alt="Cookbook Connect Logo" height={32} width={32} />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Cookbook Connect</span>
                 </Link>
                 <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                     {session?.user
                         ? <>
-                                <button ref={avaDropButtonRef} type="button" className="flex items-center text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                                <button ref={avaDropButtonRef} type="button" className="flex items-center bg-gray-100 text-sm dark:bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                                     <span className="sr-only">Open user menu</span>
-                                    <Image
-                                        src={session?.user.image ?? "/image-missing.svg"}
-                                        className="w-8 h-8 rounded-full mr-2"
-                                        alt="Open user menu"
-                                        height="36"
-                                        width="36"
-                                    />
+                                    {session?.user.image
+                                        ? <Image
+                                                src={session.user.image}
+                                                className="w-8 h-8 rounded-full mr-2"
+                                                alt="Open user menu"
+                                                height="36"
+                                                width="36"
+                                            />
+                                        : <div className="w-8 h-8 rounded-full p-1 mr-2 bg-slate-600 text-white">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>}
                                     <div className="flex text-sm m-auto">{session?.user.displayName}</div>
                                     <svg className="w-4 h-4 mx-1.5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
