@@ -7,11 +7,11 @@ import {ReadyDataSource} from "@/data-source";
 import {
     Recipe, RecipeCategory, RecipeDifficulty,
 } from "@/entities/recipe.entity";
-import {RecipeIngredient} from "@/entities/recipe-ingredient.entity";
-import {Tool} from "@/entities/tool.entity";
 import {runTransaction} from "@/lib/runTransaction";
 
+import {RecipeIngredient} from "../../../entities/recipe-ingredient.entity";
 import {Tag} from "../../../entities/tag.entity";
+import {Tool} from "../../../entities/tool.entity";
 import {includeAll} from "../../../lib/includeAll";
 import {authOptions} from "../auth/[...nextauth]";
 
@@ -135,6 +135,8 @@ export default async function handler(
                 time: postInput.data.time,
             });
 
+            await em.insert(Recipe, recipe);
+
             const tags = await em.find(Tag, {where: {id: In(postInput.data.tags)} });
             recipe.tags = tags;
 
@@ -144,8 +146,10 @@ export default async function handler(
             await em.save(Recipe, recipe);
 
             for (const ingredient of postInput.data.ingredients) {
-                const recipeIngredient = em.create(RecipeIngredient, {recipeId: recipe.id, ...ingredient});
-                await em.save(recipeIngredient);
+                const recipeIngredient = em.create(RecipeIngredient, ingredient);
+                recipeIngredient.recipe = recipe;
+
+                await em.insert(RecipeIngredient, recipeIngredient);
             }
 
             return recipe;

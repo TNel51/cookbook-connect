@@ -57,7 +57,7 @@ export default function Recipe(): ReactElement {
             {recipe.difficulty === RecipeDifficulty.Difficult && <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Difficult</span>}
             <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{recipe.category}</span>
         </div>
-        {recipe.tags.length && <div>
+        {recipe.tags.length >= 1 && <div>
             {recipe.tags.map(tag => <span key={tag.id} className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">{tag.code}</span>)}
         </div>}
         <div><span className="font-bold">Time required:</span> {recipe.time}</div>
