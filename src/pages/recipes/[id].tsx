@@ -135,23 +135,7 @@ export default function Recipe(): ReactElement {
         </form>
         <div className="relative z-0 w-full mb-5 group">
             <div className="grid gap-4">
-                <Rating rating={{
-                    user: {
-                        displayName: "Bobby Hill",
-                        createdAt: new Date(),
-                    },
-                    numStars: 4,
-                    createdAt: new Date(),
-                    comment: "This was really good",
-                } as RatingEntity} />
-                <Rating rating={{
-                    user: {
-                        displayName: "Hank Hill",
-                        createdAt: new Date(),
-                    },
-                    numStars: 2,
-                    createdAt: new Date(),
-                } as RatingEntity} />
+                {recipe.ratings.map(rating => <Rating key={rating.id} rating={rating} />)}
             </div>
         </div>
     </section>;

@@ -42,6 +42,9 @@ export default async function handler(
                 ingredient: true,
             },
             tools: true,
+            ratings: {
+                user: true,
+            },
         },
         select: includeAll(recipeRepo),
     });
