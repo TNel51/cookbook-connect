@@ -1,4 +1,4 @@
-import React from "react";
+import type {ReactElement} from "react";
 
 import RecipeCard from "../components/PublicSearchResult"; // Adjust the path as necessary
 import SearchComponent from "../components/Search"; // Import the SearchComponent
@@ -31,16 +31,18 @@ const recipeData = [
     // ... more recipes
 ];
 
-const SearchPublicRecipes = () => {
+const SearchPublicRecipes = (): ReactElement => {
     // Define the handler for viewing a recipe
-    const handleViewRecipe = recipeId => {
+    const handleViewRecipe = (recipeId: number): void => {
         // Logic to handle viewing the recipe details
+        // eslint-disable-next-line no-console
         console.log("Viewing recipe", recipeId);
     };
 
     // This is a stub for the search function, replace with actual search logic
-    const handleSearch = searchCriteria => {
+    const handleSearch = (searchCriteria: string): void => {
         // You will need to implement the logic to filter the recipeData based on the search criteria
+        // eslint-disable-next-line no-console
         console.log("Search criteria:", searchCriteria);
     };
 

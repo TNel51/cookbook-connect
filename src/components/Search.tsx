@@ -1,9 +1,11 @@
-import React, {useState} from "react";
+import type {ReactElement} from "react";
+import {useState} from "react";
 
 // Define a type for the dropdown visibility state
 type DropdownVisibilityState = Record<number, boolean>;
 
-const SearchComponent = (): React.JSX.Element => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const SearchComponent = ({onSearch}: {onSearch: (search: string) => void;}): ReactElement => {
     // Specify the type of the state
     const [isDropdownVisible, setDropdownVisible] = useState<DropdownVisibilityState>({});
 

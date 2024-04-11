@@ -5,7 +5,6 @@ import {type ReactElement, useState} from "react";
 import useSWR from "swr";
 
 import Rating from "@/components/Rating";
-import type {Rating as RatingEntity} from "@/entities/rating.entity";
 import {type Recipe as RecipeEntity, RecipeDifficulty} from "@/entities/recipe.entity";
 
 import {fetcher} from "../../lib/swrFetcher";
@@ -37,7 +36,7 @@ export default function Recipe(): ReactElement {
     </div>;
 
     if (error) return <div>Failed to load recipe!</div>;
-    
+
     return <section className="space-y-4">
         <div className="text-2xl flex space-x-2">
             <span>{recipe.title}</span>

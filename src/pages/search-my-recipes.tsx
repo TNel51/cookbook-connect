@@ -22,7 +22,8 @@ const MyRecipesPage = (): ReactElement => {
 
     return (
         <div className="container mx-auto p-6">
-            <SearchComponent />
+            {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+            <SearchComponent onSearch={(str: string) => {}}/>
             <div className="mt-6">
                 {recipes.map((recipe, index) => (
                     <SavedRecipeComponent
