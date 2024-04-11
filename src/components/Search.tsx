@@ -1,6 +1,8 @@
+import type {ReactElement} from "react";
 import {useEffect, useState} from "react";
 
-const SearchComponent = ({onSearch}: {onSearch: (search: string) => void;}) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const SearchComponent = ({onSearch}: {onSearch: (search: string) => void;}): ReactElement => {
     // Specify the type of the state
     const [isDropdownVisible, setDropdownVisible] = useState<Record<number, boolean>>({});
 
@@ -11,7 +13,7 @@ const SearchComponent = ({onSearch}: {onSearch: (search: string) => void;}) => {
     ];
 
     // Function to handle clicking outside to close dropdowns
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent): void => {
         let isClickInsideDropdown = false;
 
         // Check if the click is on one of the dropdown buttons or contents
@@ -29,7 +31,7 @@ const SearchComponent = ({onSearch}: {onSearch: (search: string) => void;}) => {
     };
 
     // Toggle dropdown visibility
-    const toggleDropdown = (index: number) => {
+    const toggleDropdown = (index: number): void => {
         setDropdownVisible(prevState => ({
             ...prevState,
             [index]: !prevState[index],

@@ -30,7 +30,7 @@ const MyRecipesPage = (): ReactElement => {
                         key={index}
                         title={recipe.title}
                         description={recipe.description}
-                        onDoubleClick={handleDoubleClick}
+                        onClick={() => {}}
                     />
                 ))}
             </div>
