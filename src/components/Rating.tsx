@@ -1,4 +1,5 @@
 import {format} from "date-fns";
+import Image from "next/image";
 import {type ReactElement} from "react";
 
 import type {Rating as RatingEntity} from "@/entities/rating.entity";
@@ -6,7 +7,19 @@ import type {Rating as RatingEntity} from "@/entities/rating.entity";
 export default function Rating({rating}: {rating: RatingEntity;}): ReactElement {
     return <div>
         <div className="flex items-center mb-4">
-            <img className="w-10 h-10 me-4 rounded-full" src="/image-missing.svg" alt=""/>
+            {rating.user.avatarUrl
+                ? <Image
+                        src={rating.user.avatarUrl}
+                        className="w-10 h-10 me-4 rounded-full"
+                        alt="Open user menu"
+                        height="36"
+                        width="36"
+                    />
+                : <div className="w-10 h-10 me-4 rounded-full p-2 bg-slate-600 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                            <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
+                        </svg>
+                    </div>}
             <div className="font-medium dark:text-white">
                 <p>{rating.user.displayName}</p>
                 <p suppressHydrationWarning className="block text-sm text-gray-500 dark:text-gray-400">Joined on {format(rating.user.createdAt, "MMMM d, yyyy")}</p>
