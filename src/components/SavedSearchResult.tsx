@@ -4,16 +4,16 @@ import React from "react";
 interface SavedRecipeComponentProps {
     title: string;
     description: string;
-    onDoubleClick: () => void; // Adjust this type according to the expected signature of the onDoubleClick function
+    onClick: () => void; // Updated the prop type to reflect the event change
 }
 
 const SavedRecipeComponent: React.FC<SavedRecipeComponentProps> = ({
     title,
     description,
-    onDoubleClick,
+    onClick, // Updated to use onClick
 }): React.JSX.Element => (
     <div
-        onDoubleClick={onDoubleClick}
+        onClick={onClick} // Changed from onDoubleClick to onClick
         className="cursor-pointer bg-white dark:bg-gray-700 shadow rounded-lg p-4 mb-4"
     >
         <div>
