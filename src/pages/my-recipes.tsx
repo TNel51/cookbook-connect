@@ -59,14 +59,14 @@ export default function MyRecipes(): ReactElement {
             });
     }, [categoryFilter, difficultyFilter]);
 
-    return <div className="py-8 px-4">
+    return <section>
         <div className="flex justify-between align-center">
             <h1 className="text-2xl font-bold">My Recipes</h1>
             <Link href="/create-recipe" className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-slate-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-slate-600 dark:text-slate-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                 Create Recipe
             </Link>
         </div>
-        <form className="max-w-lg mx-auto mb-4">
+        <div className="max-w-lg mx-auto mb-4">
             <div className="md:flex justify-center">
                 <div className="md:flex md:me-4 mb-2 md:mb-0">
                     <label htmlFor="category" className="mb-2 md:my-auto md:me-2 block text-sm font-medium text-gray-900 dark:text-white">Category</label>
@@ -89,8 +89,8 @@ export default function MyRecipes(): ReactElement {
                     </select>
                 </div>
             </div>
-        </form>
-        <div className="grid gap-4 md:grid-cols-2">
+        </div>
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
             {!loading && (recipes.length ? recipes.map(r => <Recipe key={r.id} recipe={r}/>) : <div className="md:col-span-2 text-center text-lg mt-2">No recipes! Create one.</div>)}
             {loadingMore || loading
                 ? <div className="md:col-span-2">
@@ -112,5 +112,5 @@ export default function MyRecipes(): ReactElement {
                     <button type="button" onClick={() => { loadMoreRecipes() } } className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Load More</button>
                 </div>}
         </div>
-    </div>;
+    </section>;
 }

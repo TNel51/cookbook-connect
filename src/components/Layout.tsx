@@ -9,7 +9,7 @@ export default function Layout({children}: PropsWithChildren): ReactElement {
         <main className="bg-greyish">
             <div className="flex flex-col min-h-screen">
                 <NavBar />
-                <div className="container mx-auto flex-grow py-4 px-2">
+                <div className="container mx-auto flex-grow py-2 px-2 md:py-8">
                     {children}
                 </div>
             </div>

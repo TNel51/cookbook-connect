@@ -15,7 +15,7 @@ export const authOptions: AuthOptions = {
             name: "Credentials",
             credentials: {
                 email: {
-                    label: "Email", type: "text", placeholder: "jsmith",
+                    label: "Email", type: "text", placeholder: "jsmith@example.com",
                 },
                 password: {label: "Password", type: "password"},
             },
@@ -25,18 +25,19 @@ export const authOptions: AuthOptions = {
                 try {
                     const ds = await ReadyDataSource();
                     const userRepository = ds.getRepository(User);
-                    const credentialsUser = await userRepository.findOne({
-                        where: {email: credentials.email},
+                    const user = await userRepository.findOne({
+                        where: {email: credentials.email.toLowerCase()},
                         select: {
                             id: true,
+                            displayName: true,
+                            email: true,
+                            avatarUrl: true,
                             password: true,
                         },
                     });
 
-                    if (!credentialsUser) return null;
-                    if (!await compare(credentials.password, credentialsUser.password)) return null;
-
-                    const user = await userRepository.findOneOrFail({where: {id: credentialsUser.id} });
+                    if (!user) return null;
+                    if (!await compare(credentials.password, user.password)) return null;
 
                     return {
                         id: user.id,
@@ -54,9 +55,6 @@ export const authOptions: AuthOptions = {
     ],
     pages: {
         signIn: "/sign-in",
-        // signOut: "/sign-out",
-        // error: "/error",
-        // verifyRequest: "/verify-request",
         newUser: "/sign-up",
     },
     callbacks: {
