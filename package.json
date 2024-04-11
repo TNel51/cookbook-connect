@@ -6,6 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next build && next start",
+        "nbstart": "next start",
         "lint": "next lint",
         "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -d ormconfig.ts ./migrations/Automigration",
         "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d ormconfig.ts",

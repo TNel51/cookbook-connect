@@ -5,7 +5,7 @@ import {
     ManyToMany,
     ManyToOne,
     OneToMany,
-    Relation,
+    type Relation,
     VirtualColumn,
 } from "typeorm";
 

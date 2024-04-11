@@ -1,6 +1,8 @@
 import {
-    Column, Entity, ManyToOne,
-    Relation,
+    Column,
+    Entity,
+    ManyToOne,
+    type Relation,
 } from "typeorm";
 
 import {BaseEntity} from "./base-entity";
