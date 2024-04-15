@@ -3,7 +3,7 @@ import {getServerSession} from "next-auth";
 import {type EntityManager, In} from "typeorm";
 import {z} from "zod";
 
-import {ReadyDataSource} from "@/data-source";
+import {ReadyDataSource, similarityBuilder} from "@/data-source";
 import {
     Recipe, RecipeCategory, RecipeDifficulty,
 } from "@/entities/recipe.entity";
@@ -19,15 +19,17 @@ const GetQuerySchema = z.object({
     mine: z.enum(["true", "false"]).optional(),
     take: z.string(),
     skip: z.string(),
+    key: z.string().optional(),
     category: z.nativeEnum(RecipeCategory).optional(),
     difficulty: z.nativeEnum(RecipeDifficulty).optional(),
 }).strict()
     .transform(({
-        mine, take, skip, category, difficulty,
+        mine, take, skip, key, category, difficulty,
     }) => ({
         mine: mine === "true",
         take: parseInt(take),
         skip: parseInt(skip),
+        key: key,
         category: category,
         difficulty: difficulty,
     }));
@@ -90,12 +92,28 @@ export default async function handler(
             });
     
             res.status(200).json({total: totalRecipes, recipes: recipes});
+        } else if (getInput.data.key) {
+            const recipesBuilder = await similarityBuilder(Recipe, getInput.data.key, "title", 0.2, 10);
+            recipesBuilder.orWhere(`${Recipe.constructor.name}.title ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
+            recipesBuilder.andWhere(`${Recipe.constructor.name}.public=true`);
+            if (getInput.data.category) recipesBuilder.andWhere(`${Recipe.constructor.name}.category = :category`, {category: getInput.data.category});
+            if (getInput.data.difficulty) recipesBuilder.andWhere(`${Recipe.constructor.name}.difficulty = :difficulty`, {difficulty: getInput.data.difficulty});
+            recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.creator`, "creator");
+            recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.tags`, "tags");
+            recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.ingredients`, "ingredients");
+            recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.tools`, "tools");
+            
+            const [recipes, totalRecipes] = await recipesBuilder.getManyAndCount();
+
+            res.status(200).json({total: totalRecipes, recipes: recipes});
         } else {
             const [recipes, totalRecipes] = await recipeRepo.findAndCount({
                 take: getInput.data.take,
                 skip: getInput.data.skip,
                 where: {
                     public: true,
+                    category: getInput.data.category,
+                    difficulty: getInput.data.difficulty,
                 },
                 relations: {
                     creator: true,
@@ -105,7 +123,7 @@ export default async function handler(
                 },
                 select: includeAll(recipeRepo),
             });
-    
+        
             res.status(200).json({total: totalRecipes, recipes: recipes});
         }
     } else if (req.method === "POST") {
