@@ -1,8 +1,12 @@
 import axios from "axios";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {useSession} from "next-auth/react";
 import {
-    type ReactElement,     useCallback,
-    useEffect, useState,
+    type ReactElement,
+    useCallback,
+    useEffect,
+    useState,
 } from "react";
 import {toast} from "react-toastify";
 
@@ -10,7 +14,11 @@ import Recipe from "@/components/Recipe";
 import type {RecipeCategory, RecipeDifficulty} from "@/entities/recipe.entity";
 import {type Recipe as RecipeEntity} from "@/entities/recipe.entity";
 
+import Loading from "../components/Loading";
+
 export default function MyRecipes(): ReactElement {
+    const session = useSession();
+    const router = useRouter();
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
     const [recipes, setRecipes] = useState<RecipeEntity[]>([]);
@@ -46,6 +54,8 @@ export default function MyRecipes(): ReactElement {
     }, [loadMoreRecipes]);
 
     useEffect(() => {
+        if (!session.data?.user) return;
+
         setLoading(true);
         axios.get<{total: number; recipes: RecipeEntity[];}>(`/api/recipes?mine=true&take=10&skip=0${categoryFilter !== "Any" ? `&category=${categoryFilter}` : ""}${difficultyFilter !== "Any" ? `&difficulty=${difficultyFilter}` : ""}`)
             .then(res => {
@@ -56,7 +66,14 @@ export default function MyRecipes(): ReactElement {
             .catch(() => {
                 toast.error("Failed to load recipes");
             });
-    }, [categoryFilter, difficultyFilter]);
+    }, [session.data?.user, categoryFilter, difficultyFilter]);
+    
+    useEffect(() => {
+        if (!session.data?.user) router.push("/sign-in")
+            .catch(() => toast.error("Failed to redirect when not logged in."));
+    });
+
+    if (!session.data?.user) return <Loading />;
 
     return <section>
         <div className="flex justify-between align-center">

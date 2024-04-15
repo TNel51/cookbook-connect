@@ -7,9 +7,10 @@ import StarterKit from "@tiptap/starter-kit";
 import type {AxiosError} from "axios";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {useSession} from "next-auth/react";
 import type {FormEvent} from "react";
 import {
-    type ReactElement, useState,
+    type ReactElement, useEffect, useState,
 } from "react";
 import {toast} from "react-toastify";
 
@@ -19,6 +20,7 @@ import {type Recipe} from "@/entities/recipe.entity";
 import AddIngredientModal from "../components/CreateRecipe/AddIngredientModal";
 import AddTagModal from "../components/CreateRecipe/AddTagModel";
 import AddToolModal from "../components/CreateRecipe/AddToolModal";
+import Loading from "../components/Loading";
 import type {BaseEntityFields} from "../entities/base-entity";
 import type {Ingredient} from "../entities/ingredient.entity";
 import type {RecipeIngredient} from "../entities/recipe-ingredient.entity";
@@ -26,6 +28,7 @@ import type {Tag} from "../entities/tag.entity";
 import type {Tool} from "../entities/tool.entity";
 
 export default function CreateRecipe(): ReactElement {
+    const session = useSession();
     const router = useRouter();
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
@@ -38,26 +41,6 @@ export default function CreateRecipe(): ReactElement {
     const [ingredients, setIngredients] = useState<Array<Omit<RecipeIngredient, BaseEntityFields | "recipe" | "recipeId">>>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline.configure(),
-            TextStyle,
-            Color,
-            Placeholder.configure({
-                emptyEditorClass: "is-editor-empty",
-                placeholder: "Write some instructions!",
-            }),
-        ],
-        editorProps: {
-            attributes: {
-                class: "prose dark:prose-invert w-full max-w-full prose-sm mx-auto focus:outline-none",
-            },
-        },
-        content: instructions,
-        onUpdate: e => { setInstructions(e.editor.getHTML()) },
-    });
     
     const createRecipe = (e: FormEvent): void => {
         e.preventDefault();
@@ -83,6 +66,33 @@ export default function CreateRecipe(): ReactElement {
                 setSubmitDisabled(false);
             });
     };
+
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Underline.configure(),
+            TextStyle,
+            Color,
+            Placeholder.configure({
+                emptyEditorClass: "is-editor-empty",
+                placeholder: "Write some instructions!",
+            }),
+        ],
+        editorProps: {
+            attributes: {
+                class: "prose dark:prose-invert w-full max-w-full prose-sm mx-auto focus:outline-none",
+            },
+        },
+        content: instructions,
+        onUpdate: e => { setInstructions(e.editor.getHTML()) },
+    });
+    
+    useEffect(() => {
+        if (!session.data?.user) router.push("/sign-in")
+            .catch(() => toast.error("Failed to redirect when not logged in."));
+    });
+
+    if (!session.data?.user) return <Loading />;
     
     return <>
         <section className="mx-auto max-w-2xl">
