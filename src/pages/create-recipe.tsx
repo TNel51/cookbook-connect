@@ -30,6 +30,7 @@ import type {Tool} from "../entities/tool.entity";
 export default function CreateRecipe(): ReactElement {
     const session = useSession();
     const router = useRouter();
+    const [isPublic, setPublic] = useState<boolean>(false);
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
     const [category, setCategory] = useState<RecipeCategory>();
@@ -47,7 +48,7 @@ export default function CreateRecipe(): ReactElement {
         setSubmitDisabled(true);
         
         axios.post<Recipe>(`/api/recipes`, {
-            public: false,
+            public: isPublic,
             title: title,
             description: description,
             category: category,
@@ -88,17 +89,23 @@ export default function CreateRecipe(): ReactElement {
     });
     
     useEffect(() => {
-        if (!session.data?.user) router.push("/sign-in")
+        if (session.status === "unauthenticated") router.push("/sign-in")
             .catch(() => toast.error("Failed to redirect when not logged in."));
     });
 
-    if (!session.data?.user) return <Loading />;
+    if (session.status !== "authenticated") return <Loading />;
     
     return <>
         <section className="mx-auto max-w-2xl">
             <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Create a New Recipe</h2>
             <form className="mx-auto" onSubmit={createRecipe}>
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 mb-4">
+                    <div className="sm:col-span-2">
+                        <div className="flex items-center me-4">
+                            <input id="public" type="checkbox" checked={isPublic} onChange={e => { setPublic(e.target.checked) }} className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <label htmlFor="public" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Recipe is Public</label>
+                        </div>
+                    </div>
                     <div className="sm:col-span-2">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Recipe Title</label>
                         <input

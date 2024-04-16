@@ -15,11 +15,11 @@ export default function SignIn({csrfToken}: {csrfToken: string | undefined;}): R
     const credentialsError = searchParams.get("error") === "CredentialsSignin";
 
     useEffect(() => {
-        if (session.data?.user) router.push(searchParams.get("callbackUrl") ?? "/")
+        if (session.status === "authenticated") router.push("/")
             .catch(() => toast.error("Failed to redirect when logged in."));
     });
 
-    if (session.data?.user) return <Loading />;
+    if (session.status !== "unauthenticated") return <Loading />;
 
     return <section>
         <div className="flex items-center justify-center">

@@ -21,12 +21,7 @@ export default function SignUp(): ReactElement {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [submitError, setSubmitError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (session.data?.user) router.push("/")
-            .catch(() => toast.error("Failed to redirect when logged in."));
-    });
-
+    
     const handleSubmit = (e: FormEvent): void => {
         e.preventDefault();
         
@@ -49,8 +44,13 @@ export default function SignUp(): ReactElement {
                 error.response?.data && setSubmitError(error.response.data);
             });
     };
+    
+    useEffect(() => {
+        if (session.status === "authenticated") router.push("/")
+            .catch(() => toast.error("Failed to redirect when logged in."));
+    });
 
-    if (session.data?.user) return <Loading />;
+    if (session.status !== "unauthenticated") return <Loading />;
     
     return <section>
         <div className="flex items-center justify-center">

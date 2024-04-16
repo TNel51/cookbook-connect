@@ -59,7 +59,18 @@ export class Recipe extends BaseEntity {
     @Column()
     time: string;
 
-    @VirtualColumn({query: alias => `SELECT COALESCE(AVG("rating"."numStars"), 0) FROM "rating" WHERE "recipeId"=${alias}.id`})
+    @VirtualColumn({
+        query: alias => `SELECT COALESCE(AVG("rating"."numStars"), 0) FROM "rating" WHERE "recipeId"=${alias}.id`,
+        type: "float",
+        transformer: {
+            to(value: string | number) {
+                return value.toString();
+            },
+            from(value: string) {
+                return parseFloat(value);
+            },
+        },
+    })
     numStars: number;
 
     @ManyToMany(() => Tag, t => t.recipes)

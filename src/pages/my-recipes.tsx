@@ -69,11 +69,11 @@ export default function MyRecipes(): ReactElement {
     }, [session.data?.user, categoryFilter, difficultyFilter]);
     
     useEffect(() => {
-        if (!session.data?.user) router.push("/sign-in")
+        if (session.status === "unauthenticated") router.push("/sign-in")
             .catch(() => toast.error("Failed to redirect when not logged in."));
     });
 
-    if (!session.data?.user) return <Loading />;
+    if (session.status !== "authenticated") return <Loading />;
 
     return <section>
         <div className="flex justify-between align-center">
