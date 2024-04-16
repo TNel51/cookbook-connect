@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+// import html2pdf from "jspdf-html2canvas";
 import {useParams} from "next/navigation";
 import type {FormEvent} from "react";
 import {type ReactElement, useState} from "react";
@@ -20,6 +21,39 @@ export default function Recipe(): ReactElement {
     const createRating = (e: FormEvent): void => {
         e.preventDefault();
     };
+
+    const generatePDF = async (): void => {
+        
+        const html2pdf = (await import("html2pdf.js")).default;
+        // Choose the element id which you want to export.
+        const element = document.getElementById("recipepdf");
+        if (!element) { return }
+        // element.style.width = "700px";
+        // element.style.height = "900px";
+        const opt = {
+            margin:       0.5,
+            filename:     "myrecipe.pdf",
+            image:        {type: "jpeg", quality: 1},
+            html2canvas:  {scale: 1},
+            jsPDF:        {
+                unit: "in", format: "letter", orientation: "portrait", precision: "12",
+            },
+        };
+        
+        // choose the element and pass it to html2pdf() function and call the save() on it to save as pdf.
+        html2pdf().set(opt).from(element).save();
+    };
+
+    // const generatePDF = async (): void => {
+    //     const element = document.getElementById("recipeid");
+    //     if (!element) return;
+    //     const pdf = await html2pdf(element, {
+    //         jsPDF: {
+    //             format: "a4",
+    //         },
+    //     });
+        
+    // };
 
     if (isLoading || !recipe) return <div className="flex max-w-20 mx-auto">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
@@ -118,6 +152,7 @@ export default function Recipe(): ReactElement {
                 <div className="prose dark:prose-invert prose-sm" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(recipe.instructions)}} />
             </div>
         </div>
+        <button type="button" onClick={() => { generatePDF() } } className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Export to PDF</button>
         <form className="space-y-2" onSubmit={createRating}>
             <label className="font-bold">Rate this Recipe</label>
             <div className="flex items-center mb-1 space-x-1">
