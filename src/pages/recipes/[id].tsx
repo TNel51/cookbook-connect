@@ -38,83 +38,85 @@ export default function Recipe(): ReactElement {
     if (error) return <div>Failed to load recipe!</div>;
 
     return <section className="space-y-4">
-        <div className="text-2xl flex space-x-2">
-            <span>{recipe.title}</span>
-            <div className="flex my-auto space-x-1 rtl:space-x-reverse">
-                {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                {Math.round(recipe.numStars) >= 0 && [...Array(Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>)}
-                {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                {Math.round(recipe.numStars) < 5 && [...Array(5 - Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>)}
+        <div className="space-y-4" id="recipepdf">
+            <div className="text-2xl flex space-x-2">
+                <span>{recipe.title}</span>
+                <div className="flex my-auto space-x-1 rtl:space-x-reverse">
+                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+                    {Math.round(recipe.numStars) >= 0 && [...Array(Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>)}
+                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+                    {Math.round(recipe.numStars) < 5 && [...Array(5 - Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>)}
+                </div>
+                <div className="flex my-auto">
+                    <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">{((Number(recipe.numStars.toFixed(2))))}</p>
+                    <span className="my-auto w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
+                    <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">73 reviews</a>
+                </div>
             </div>
-            <div className="flex my-auto">
-                <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">{((Number(recipe.numStars.toFixed(2))))}</p>
-                <span className="my-auto w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">73 reviews</a>
+            <div>
+                {recipe.difficulty === RecipeDifficulty.Easy && <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Easy</span>}
+                {recipe.difficulty === RecipeDifficulty.Medium && <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Medium</span>}
+                {recipe.difficulty === RecipeDifficulty.Difficult && <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Difficult</span>}
+                <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{recipe.category}</span>
             </div>
-        </div>
-        <div>
-            {recipe.difficulty === RecipeDifficulty.Easy && <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Easy</span>}
-            {recipe.difficulty === RecipeDifficulty.Medium && <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Medium</span>}
-            {recipe.difficulty === RecipeDifficulty.Difficult && <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Difficult</span>}
-            <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{recipe.category}</span>
-        </div>
-        {recipe.tags.length >= 1 && <div>
-            {recipe.tags.map(tag => <span key={tag.id} className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">{tag.code}</span>)}
-        </div>}
-        <div><span className="font-bold">Time required:</span> {recipe.time}</div>
-        <div>{recipe.description}</div>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th className="px-6 py-3 flex justify-between">
-                        <div className="my-auto">Tools</div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {recipe.tools.map(tool => <tr key={tool.id} className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div className="my-auto">{tool.text}</div>
-                    </td>
-                </tr>)}
-            </tbody>
-        </table>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th className="px-6 py-3">
-                        <div className="my-auto">Ingredient</div>
-                    </th>
-                    <th className="px-6 py-3 flex justify-between">
-                        <div className="my-auto">Quantity</div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {recipe.ingredients.length
-                    ? recipe.ingredients.map(ingredient => <tr key={ingredient.ingredientId} className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
+            {recipe.tags.length >= 1 && <div>
+                {recipe.tags.map(tag => <span key={tag.id} className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">{tag.code}</span>)}
+            </div>}
+            <div><span className="font-bold">Time required:</span> {recipe.time}</div>
+            <div>{recipe.description}</div>
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th className="px-6 py-3 flex justify-between">
+                            <div className="my-auto">Tools</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {recipe.tools.map(tool => <tr key={tool.id} className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {ingredient.ingredient.text}
+                            <div className="my-auto">{tool.text}</div>
                         </td>
-                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {ingredient.quantity}
-                        </td>
-                    </tr>)
-                    : <tr className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
-                            <td className="px-6 py-4 font-medium text-gray-400 whitespace-nowrap" colSpan={2}>
-                                <div className="my-auto italic">There aren&apos;t any ingredients. Add some!</div>
+                    </tr>)}
+                </tbody>
+            </table>
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th className="px-6 py-3">
+                            <div className="my-auto">Ingredient</div>
+                        </th>
+                        <th className="px-6 py-3 flex justify-between">
+                            <div className="my-auto">Quantity</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {recipe.ingredients.length
+                        ? recipe.ingredients.map(ingredient => <tr key={ingredient.ingredientId} className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
+                            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {ingredient.ingredient.text}
                             </td>
-                        </tr>
-                }
-            </tbody>
-        </table>
-        <div>
-            <label className="font-bold">Instructions</label>
-            <div className="prose dark:prose-invert prose-sm" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(recipe.instructions)}} />
+                            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {ingredient.quantity}
+                            </td>
+                        </tr>)
+                        : <tr className="bg-white border-y dark:bg-gray-800 dark:border-gray-700">
+                                <td className="px-6 py-4 font-medium text-gray-400 whitespace-nowrap" colSpan={2}>
+                                    <div className="my-auto italic">There aren&apos;t any ingredients. Add some!</div>
+                                </td>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+            <div>
+                <label className="font-bold">Instructions</label>
+                <div className="prose dark:prose-invert prose-sm" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(recipe.instructions)}} />
+            </div>
         </div>
         <form className="space-y-2" onSubmit={createRating}>
             <label className="font-bold">Rate this Recipe</label>
