@@ -8,7 +8,10 @@ import {Rating} from "@/entities/rating.entity";
 import {authOptions} from "../../../auth/[...nextauth]";
 
 const PostBodySchema = z.object({
-    code: z.string(),
+    numStars: z.number().min(1)
+        .max(5)
+        .step(1),
+    comment: z.string().optional(),
 }).strict();
 
 export default async function handler(
@@ -43,11 +46,13 @@ export default async function handler(
             return;
         }
 
-        // const rating = ratingRepo.create({
-        //     userId: session.user.id,
-        //     code: postInput.data.code.toLowerCase().replaceAll(/[^a-zA-Z0-9 ]/g, ""),
-        // });
-        // await ratingRepo.save(rating);
+        const rating = ratingRepo.create({
+            recipeId: parseInt(id),
+            userId: session.user.id,
+            numStars: postInput.data.numStars,
+            comment: postInput.data.comment,
+        });
+        await ratingRepo.save(rating);
 
         res.status(200).json({} as Rating);
     } else {
