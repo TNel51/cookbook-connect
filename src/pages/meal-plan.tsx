@@ -1,6 +1,8 @@
+import type {ReactElement} from "react";
+
 import DayColumn from "../components/MealPlanColumn";
 
-const MealPlan = () => {
+const MealPlan = (): ReactElement => {
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const mealContent = {
         breakfast: "Tomato Soup",
