@@ -6,6 +6,8 @@ import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import type {AxiosError} from "axios";
 import axios from "axios";
+import NextError from "next/error";
+import {useParams} from "next/navigation";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
 import type {FormEvent} from "react";
@@ -13,24 +15,30 @@ import {
     type ReactElement, useEffect, useState,
 } from "react";
 import {toast} from "react-toastify";
+import useSWR from "swr";
 
-import type {RecipeCategory, RecipeDifficulty} from "@/entities/recipe.entity";
-import {type Recipe} from "@/entities/recipe.entity";
+import AddIngredientModal from "../../../components/CreateRecipe/AddIngredientModal";
+import AddTagModal from "../../../components/CreateRecipe/AddTagModel";
+import AddToolModal from "../../../components/CreateRecipe/AddToolModal";
+import Loading from "../../../components/Loading";
+import type {BaseEntityFields} from "../../../entities/base-entity";
+import type {Ingredient} from "../../../entities/ingredient.entity";
+import type {
+    Recipe as RecipeEntity, RecipeCategory, RecipeDifficulty,
+} from "../../../entities/recipe.entity";
+import type {RecipeIngredient} from "../../../entities/recipe-ingredient.entity";
+import type {Tag} from "../../../entities/tag.entity";
+import type {Tool} from "../../../entities/tool.entity";
+import {fetcher} from "../../../lib/swrFetcher";
 
-import AddIngredientModal from "../components/CreateRecipe/AddIngredientModal";
-import AddTagModal from "../components/CreateRecipe/AddTagModel";
-import AddToolModal from "../components/CreateRecipe/AddToolModal";
-import Loading from "../components/Loading";
-import type {BaseEntityFields} from "../entities/base-entity";
-import type {Ingredient} from "../entities/ingredient.entity";
-import type {RecipeIngredient} from "../entities/recipe-ingredient.entity";
-import type {Tag} from "../entities/tag.entity";
-import type {Tool} from "../entities/tool.entity";
-
-export default function CreateRecipe(): ReactElement {
+export default function UpdateRecipe(): ReactElement {
     const session = useSession();
     const router = useRouter();
-    
+    const params = useParams<{id: string;}>() as {id: string;} | undefined;
+    const {
+        data: recipe, isLoading, error,
+    } = useSWR<RecipeEntity, Error>(params?.id ? `/api/recipes/${params.id}` : undefined, fetcher);
+
     const [isPublic, setPublic] = useState<boolean>(false);
     const [title, setTitle] = useState<string>();
     const [description, setDescription] = useState<string>();
@@ -43,12 +51,13 @@ export default function CreateRecipe(): ReactElement {
     const [ingredients, setIngredients] = useState<Array<Omit<RecipeIngredient, BaseEntityFields | "recipe" | "recipeId">>>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    
-    const createRecipe = (e: FormEvent): void => {
+
+    const updateRecipe = (e: FormEvent): void => {
+        if (!params?.id) return;
         e.preventDefault();
         setSubmitDisabled(true);
         
-        axios.post<Recipe>(`/api/recipes`, {
+        axios.patch<RecipeEntity>(`/api/recipes/${params.id}`, {
             public: isPublic,
             title: title,
             description: description,
@@ -58,13 +67,15 @@ export default function CreateRecipe(): ReactElement {
             time: time,
             tags: tags.map(t => t.id),
             tools: tools.map(t => t.id),
-            ingredients: ingredients,
-        }).then(async res => {
-            toast.success(`Created new recipe: ${res.data.title}`);
-            await router.push(`/recipes/${res.data.id}`);
+            ingredients: ingredients.map(i => ({
+                ingredientId: i.ingredientId, quantity: i.quantity, required: i.required,
+            })),
+        }).then(async () => {
+            toast.success(`Successfully saved recipe.`);
+            setSubmitDisabled(false);
         })
-            .catch((error: AxiosError): void => {
-                toast.error(error.response?.data ? `Failed to create recipe: ${error.response.data as string}` : `Failed to create recipe.`);
+            .catch((err: AxiosError): void => {
+                toast.error(err.response?.data ? `Failed to update recipe: ${err.response.data as string}` : `Failed to update recipe.`);
                 setSubmitDisabled(false);
             });
     };
@@ -94,12 +105,46 @@ export default function CreateRecipe(): ReactElement {
             .catch(() => toast.error("Failed to redirect when not logged in."));
     });
 
+    useEffect(() => {
+        if (!recipe || !editor) return;
+
+        setPublic(recipe.public);
+        setTitle(recipe.title);
+        setDescription(recipe.description);
+        setCategory(recipe.category);
+        setDifficulty(recipe.difficulty);
+        setInstructions(recipe.instructions);
+        editor.commands.setContent(recipe.instructions);
+        setTime(recipe.time);
+        setTools(recipe.tools);
+        setIngredients(recipe.ingredients);
+        setTags(recipe.tags);
+    }, [recipe, editor]);
+
     if (session.status !== "authenticated") return <Loading />;
+
+    if (isLoading || !recipe) return <div className="flex max-w-20 mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+            <circle fill="#266BFF" stroke="#266BFF" strokeWidth="15" r="15" cx="40" cy="65">
+                <animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate>
+            </circle>
+            <circle fill="#266BFF" stroke="#266BFF" strokeWidth="15" r="15" cx="100" cy="65">
+                <animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate>
+            </circle>
+            <circle fill="#266BFF" stroke="#266BFF" strokeWidth="15" r="15" cx="160" cy="65">
+                <animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate>
+            </circle>
+        </svg>
+    </div>;
+
+    if (error) return <div>Failed to load recipe!</div>;
     
+    if (session.data.user.id !== recipe.creatorId) return <NextError statusCode={403} title="Cannot access recipe" />;
+
     return <>
         <section className="mx-auto max-w-2xl">
-            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Create a New Recipe</h2>
-            <form className="mx-auto" onSubmit={createRecipe}>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Recipe</h2>
+            <form className="mx-auto" onSubmit={updateRecipe}>
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 mb-4">
                     <div className="sm:col-span-2">
                         <div className="flex items-center me-4">
@@ -552,7 +597,7 @@ export default function CreateRecipe(): ReactElement {
                         />
                     </div>
                 </div>
-                <button type="submit" disabled={submitDisabled} className="disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-slate-500 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
+                <button type="submit" disabled={submitDisabled} className="disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-slate-500 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
             </form>
         </section>
         <AddToolModal addTool={(tool: Tool) => { if (!tools.some(t => t.id === tool.id)) setTools([...tools, tool]); }} currentTools={tools} />

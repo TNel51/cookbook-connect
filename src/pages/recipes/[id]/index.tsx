@@ -3,6 +3,7 @@ import axios from "axios";
 import {format} from "date-fns";
 import DOMPurify from "dompurify";
 import Image from "next/image";
+import Link from "next/link";
 import {useParams} from "next/navigation";
 import {useSession} from "next-auth/react";
 import type {FormEvent} from "react";
@@ -15,9 +16,9 @@ import useSWR from "swr";
 import Rating from "@/components/Rating";
 import {type Recipe as RecipeEntity, RecipeDifficulty} from "@/entities/recipe.entity";
 
-import Loading from "../../components/Loading";
-import type {Rating as RatingEntity} from "../../entities/rating.entity";
-import {fetcher} from "../../lib/swrFetcher";
+import Loading from "../../../components/Loading";
+import type {Rating as RatingEntity} from "../../../entities/rating.entity";
+import {fetcher} from "../../../lib/swrFetcher";
 
 export default function Recipe(): ReactElement {
     const session = useSession();
@@ -92,24 +93,27 @@ export default function Recipe(): ReactElement {
 
     return <section className="space-y-4">
         <div className="space-y-4" id="recipepdf">
-            <div className="text-2xl flex space-x-2">
+            <div className="md:flex text-2xl md:space-x-2">
                 <span>{recipe.title}</span>
-                <div className="flex my-auto space-x-1 rtl:space-x-reverse">
-                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                    {Math.round(recipe.numStars) >= 0 && [...Array(Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>)}
-                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-                    {Math.round(recipe.numStars) < 5 && [...Array(5 - Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>)}
-                </div>
                 <div className="flex my-auto">
-                    <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">{((Number(recipe.numStars.toFixed(2))))}</p>
-                    <span className="my-auto w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                    <a href="#ratings" className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{recipe.ratings.length} reviews</a>
+                    <div className="flex my-auto space-x-1 rtl:space-x-reverse">
+                        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+                        {Math.round(recipe.numStars) >= 0 && [...Array(Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>)}
+                        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+                        {Math.round(recipe.numStars) < 5 && [...Array(5 - Math.round(recipe.numStars))].map((e, i) => <svg key={i} className="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>)}
+                    </div>
+                    <div className="flex my-auto">
+                        <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">{((Number(recipe.numStars.toFixed(2))))}</p>
+                        <span className="my-auto w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
+                        <a href="#ratings" className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{recipe.ratings.length} reviews</a>
+                    </div>
                 </div>
             </div>
+            <Link href={`/recipes/${recipe.id}/update`}>Update!</Link>
             <header className="mb-4 lg:mb-6 not-format">
                 <address className="flex items-center mb-6 not-italic">
                     <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">

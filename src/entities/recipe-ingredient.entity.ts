@@ -3,6 +3,7 @@ import {
     Entity,
     ManyToOne,
     type Relation,
+    Unique,
 } from "typeorm";
 
 import {BaseEntity} from "./base-entity";
@@ -10,6 +11,7 @@ import {Ingredient} from "./ingredient.entity";
 import {Recipe} from "./recipe.entity";
 
 @Entity("recipe_ingredient")
+@Unique("recipeingredient_reciid_ingrid", ["recipeId", "ingredientId"])
 export class RecipeIngredient extends BaseEntity {
     @ManyToOne(() => Recipe)
     recipe: Relation<Recipe>;

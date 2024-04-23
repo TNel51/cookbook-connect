@@ -63,8 +63,8 @@ export class Recipe extends BaseEntity {
         query: alias => `SELECT COALESCE(AVG("rating"."numStars"), 0) FROM "rating" WHERE "recipeId"=${alias}.id`,
         type: "float",
         transformer: {
-            to(value: string | number) {
-                return value.toString();
+            to() {
+                return;
             },
             from(value: string) {
                 return parseFloat(value);

@@ -1,22 +1,36 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {getServerSession} from "next-auth";
-import {z} from "zod";
+import type {EntityManager} from "typeorm";
+import {In} from "typeorm";
+import {promise, z} from "zod";
 
 import {ReadyDataSource} from "@/data-source";
 import {
     Recipe, RecipeCategory, RecipeDifficulty,
 } from "@/entities/recipe.entity";
 
+import {RecipeIngredient} from "../../../../entities/recipe-ingredient.entity";
+import {Tag} from "../../../../entities/tag.entity";
+import {Tool} from "../../../../entities/tool.entity";
 import {includeAll} from "../../../../lib/includeAll";
+import {runTransaction} from "../../../../lib/runTransaction";
 import {authOptions} from "../../auth/[...nextauth]";
 
 const PatchBodySchema = z.object({
     public: z.boolean(),
     title: z.string(),
+    description: z.string(),
     category: z.nativeEnum(RecipeCategory),
     difficulty: z.nativeEnum(RecipeDifficulty),
     instructions: z.string(),
     time: z.string(),
+    tags: z.array(z.number()),
+    tools: z.array(z.number()),
+    ingredients: z.array(z.object({
+        ingredientId: z.number(),
+        quantity: z.string(),
+        required: z.boolean(),
+    })),
 }).strict()
     .partial();
 
@@ -84,10 +98,46 @@ export default async function handler(
             return;
         }
 
-        recipe = recipeRepo.merge(recipe, patchInput.data);
-        await recipeRepo.save(recipe);
+        const updatedRecipe = await runTransaction(async (em: EntityManager) => {
+            recipe = recipeRepo.merge(recipe!, {
+                public: patchInput.data.public,
+                title: patchInput.data.title,
+                description: patchInput.data.description,
+                category: patchInput.data.category,
+                difficulty: patchInput.data.difficulty,
+                instructions: patchInput.data.instructions,
+                time: patchInput.data.time,
+            });
+    
+            if (patchInput.data.tags) {
+                const tags = await em.find(Tag, {where: {id: In(patchInput.data.tags)} });
+                recipe.tags = tags;
+            }
+    
+            if (patchInput.data.tools) {
+                const tools = await em.find(Tool, {where: {id: In(patchInput.data.tools)} });
+                recipe.tools = tools;
+            }
+    
+            if (patchInput.data.ingredients) {
+                await Promise.all(recipe.ingredients
+                    .filter(ingr => !patchInput.data.ingredients!.some(pii => pii.ingredientId === ingr.ingredientId))
+                    .map(async ingr => em.delete(RecipeIngredient, ingr.id)));
+                    
+                for (const ingredient of patchInput.data.ingredients) {
+                    const recipeIngredient = em.create(RecipeIngredient, ingredient);
+                    recipeIngredient.recipe = recipe;
+    
+                    await em.upsert(RecipeIngredient, recipeIngredient, ["recipeingredient_reciid_ingrid"]);
+                }
+            }
+    
+            await recipeRepo.save(recipe);
 
-        res.status(200).json(recipe);
+            return recipe;
+        });
+
+        res.status(200).json(updatedRecipe);
     } else if (req.method === "DELETE") {
         if (!session) {
             res.status(400).end("Unauthenticated");
