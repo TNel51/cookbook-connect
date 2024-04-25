@@ -2,7 +2,7 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import {getServerSession} from "next-auth";
 import type {EntityManager} from "typeorm";
 import {In} from "typeorm";
-import {promise, z} from "zod";
+import {z} from "zod";
 
 import {ReadyDataSource} from "@/data-source";
 import {
@@ -128,7 +128,12 @@ export default async function handler(
                     const recipeIngredient = em.create(RecipeIngredient, ingredient);
                     recipeIngredient.recipe = recipe;
     
-                    await em.upsert(RecipeIngredient, recipeIngredient, ["recipeingredient_reciid_ingrid"]);
+                    await em.upsert(RecipeIngredient, recipeIngredient, {
+                        conflictPaths: {
+                            recipeId: true,
+                            ingredientId: true,
+                        },
+                    });
                 }
             }
     
