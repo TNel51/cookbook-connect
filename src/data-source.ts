@@ -5,6 +5,7 @@ import {DataSource as ORMDataSource} from "typeorm";
 
 import type {BaseEntity} from "./entities/base-entity";
 import {Ingredient} from "./entities/ingredient.entity";
+import {MealPlanDay} from "./entities/meal-plan-day.entity";
 import {Rating} from "./entities/rating.entity";
 import {RatingReaction} from "./entities/rating-reaction.entity";
 import {Recipe} from "./entities/recipe.entity";
@@ -27,7 +28,7 @@ export const DataSource = new ORMDataSource({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,
     schema: "public",
-    entities: [Ingredient, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, Tool, User],
+    entities: [Ingredient, MealPlanDay, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, Tool, User],
 });
 
 export async function ReadyDataSource(): Promise<ORMDataSource> {

@@ -144,7 +144,7 @@ export default function CreateRecipe(): ReactElement {
                             required
                         >
                             <option value="" disabled>Select category</option>
-                            <option value="Snack">Sanck</option>
+                            <option value="Snack">Snack</option>
                             <option value="Appetizer">Appetizer</option>
                             <option value="Meal">Meal</option>
                             <option value="Dessert">Dessert</option>
