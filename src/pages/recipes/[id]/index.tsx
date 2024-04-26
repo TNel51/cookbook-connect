@@ -27,6 +27,7 @@ export default function Recipe(): ReactElement {
     const {
         data: recipe, isLoading, error, mutate: mutateRecipe,
     } = useSWR<RecipeEntity, Error>(params?.id ? `/api/recipes/${params.id}` : undefined, fetcher);
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const [ratingNumStars, setRatingNumStars] = useState<number>(0);
     const [ratingComment, setRatingComment] = useState<string>("");
     const [submitRatingDisabled, setSubmitRatingDisabled] = useState<boolean>(false);
@@ -117,7 +118,7 @@ export default function Recipe(): ReactElement {
                 </div>
                 <div>
                     {recipe.creatorId === session.data?.user.id && <Link href={`/recipes/${recipe.id}/update`} className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Update</Link>}
-                    <button type="button" data-modal-target="mealPlanModal" data-modal-toggle="mealPlanModal" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Schedule Meal</button>
+                    <button type="button" onClick={() => { setOpenModal(!openModal) }} className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Schedule Meal</button>
                 </div>
                 <header className="mb-4 lg:mb-6 not-format">
                     <address className="flex items-center mb-6 not-italic">
@@ -235,6 +236,6 @@ export default function Recipe(): ReactElement {
                 </div>
             </div>
         </section>
-        <MealSchedulerModal recipeId={recipe.id} />
+        <MealSchedulerModal recipeId={recipe.id} openModal={openModal} setOpenModal={setOpenModal} />
     </>;
 }

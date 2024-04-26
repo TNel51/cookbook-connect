@@ -52,6 +52,10 @@ export default function UpdateRecipe(): ReactElement {
     const [tags, setTags] = useState<Tag[]>([]);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
 
+    const [toolModalOpen, setToolModalOpen] = useState<boolean>(false);
+    const [ingredientModalOpen, setIngredientModalOpen] = useState<boolean>(false);
+    const [tagModalOpen, setTagModalOpen] = useState<boolean>(false);
+
     const updateRecipe = (e: FormEvent): void => {
         if (!params?.id) return;
         e.preventDefault();
@@ -219,7 +223,7 @@ export default function UpdateRecipe(): ReactElement {
                                 <tr>
                                     <th className="px-6 py-3 flex justify-between">
                                         <div className="my-auto">Tools</div>
-                                        <button type="button" data-modal-target="toolsModal" data-modal-toggle="toolsModal">
+                                        <button type="button" onClick={() => { setToolModalOpen(!toolModalOpen) }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
@@ -257,7 +261,7 @@ export default function UpdateRecipe(): ReactElement {
                                     </th>
                                     <th className="px-6 py-3 flex justify-between">
                                         <div className="my-auto">Quantity</div>
-                                        <button type="button" data-modal-target="ingredientsModal" data-modal-toggle="ingredientsModal">
+                                        <button type="button" onClick={() => { setIngredientModalOpen(!ingredientModalOpen) }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
@@ -310,7 +314,7 @@ export default function UpdateRecipe(): ReactElement {
                                 <tr>
                                     <th className="px-6 py-3 flex justify-between">
                                         <div className="my-auto">Tags</div>
-                                        <button type="button" data-modal-target="tagsModal" data-modal-toggle="tagsModal">
+                                        <button type="button" onClick={() => { setTagModalOpen(!tagModalOpen) }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
@@ -600,12 +604,27 @@ export default function UpdateRecipe(): ReactElement {
                 <button type="submit" disabled={submitDisabled} className="disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-slate-500 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
             </form>
         </section>
-        <AddToolModal addTool={(tool: Tool) => { if (!tools.some(t => t.id === tool.id)) setTools([...tools, tool]); }} currentTools={tools} />
-        <AddIngredientModal addIngredient={(ingredient: Ingredient) => {
-            if (!ingredients.some(t => t.ingredient.id === ingredient.id)) setIngredients([...ingredients, {
-                ingredient: ingredient, ingredientId: ingredient.id, quantity: "", required: true,
-            } ]);
-        }} currentIngredients={ingredients.map(i => i.ingredient)} />
-        <AddTagModal addTag={(tag: Tag) => { if (!tags.some(t => t.id === tag.id)) setTags([...tags, tag]); }} currentTags={tags} />
+        <AddToolModal
+            addTool={(tool: Tool) => { if (!tools.some(t => t.id === tool.id)) setTools([...tools, tool]); }}
+            currentTools={tools}
+            openModal={toolModalOpen}
+            setOpenModal={setToolModalOpen}
+        />
+        <AddIngredientModal
+            addIngredient={(ingredient: Ingredient) => {
+                if (!ingredients.some(t => t.ingredient.id === ingredient.id)) setIngredients([...ingredients, {
+                    ingredient: ingredient, ingredientId: ingredient.id, quantity: "", required: true,
+                } ]);
+            }}
+            currentIngredients={ingredients.map(i => i.ingredient)}
+            openModal={ingredientModalOpen}
+            setOpenModal={setIngredientModalOpen}
+        />
+        <AddTagModal
+            addTag={(tag: Tag) => { if (!tags.some(t => t.id === tag.id)) setTags([...tags, tag]); }}
+            currentTags={tags}
+            openModal={tagModalOpen}
+            setOpenModal={setTagModalOpen}
+        />
     </>;
 }
