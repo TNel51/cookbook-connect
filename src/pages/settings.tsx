@@ -1,13 +1,43 @@
+import axios from "axios";
+import {useRouter} from "next/router";
+import {useSession} from "next-auth/react";
 import type {ReactElement} from "react";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {toast} from "react-toastify";
 
-export default function settings(): ReactElement {
-    return <div>
+import Loading from "../components/Loading";
 
-        <h1>General Information</h1>
+export default function Settings(): ReactElement {
+    const session = useSession();
+    const router = useRouter();
+    const [displayName, setDisplayName] = useState<string>();
 
-        <br></br>
-        
+    const saveProfile = (): void => {
+        if (!session.data) return;
+
+        axios.patch("/api/auth/user", {displayName})
+            .then(async () => {
+                toast.success("Saved profile. Please sign out and sign back in to see the change.");
+            })
+            .catch(() => {
+                toast.error("Failed to save profile.");
+            });
+    };
+
+    useEffect(() => {
+        if (session.status === "unauthenticated") router.push("/sign-in")
+            .catch(() => toast.error("Failed to redirect when not logged in."));
+    });
+
+    useEffect(() => {
+        if (!session.data?.user) return;
+        setDisplayName(session.data.user.displayName);
+    }, [session]);
+
+    if (session.status !== "authenticated") return <Loading />;
+
+    return <section className="space-y-4">
+        <h1>Update Your Information</h1>
         <div className="flex flex-row justify items-center">
             <div className="w-8 h-8 rounded-full p-1 mr-2 bg-slate-600 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -15,20 +45,16 @@ export default function settings(): ReactElement {
                 </svg>
             </div>
             <div>
+                <small className="text-red-500">Avatars currently do not function.</small>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Upload file</label>
-                <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file"></input>
+                <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" disabled aria-describedby="file_input_help" id="file_input" type="file"></input>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG or JPG.</p>
             </div>
         </div>
-
-        <br></br>
-
         <div>
             <label htmlFor="display_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Display Name</label>
-            <input type="text" id="display_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-sm"/>
+            <input type="text" id="display_name" value={displayName} onChange={e => { setDisplayName(e.target.value) } } className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-sm"/>
         </div>
-            
-        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Save</button>
-    </div>;
-
+        <button type="button" onClick={() => { saveProfile() } } className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Save</button>
+    </section>;
 }
