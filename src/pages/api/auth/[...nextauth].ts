@@ -1,21 +1,22 @@
 import { compare } from "bcrypt";
-import type { AuthOptions, Session, TokenSet, User } from "next-auth";
+import type { AuthOptions, User as NextAuthUser } from "next-auth";
 import NextAuth from "next-auth";
-import type { AdapterUser } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { ReadyDataSource } from "@/data-source";
 import { User as UserEntity } from "@/entities/user.entity";
 import AWS from 'aws-sdk';
 
-// Extend NextAuth types to match your User structure
-declare module "next-auth" {
-  interface User {
-    id: number;
-    displayName: string;
-    email: string;
-    avatarUrl: string | null;
-  }
+// Define our custom User type
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  displayName: string;
+  avatarUrl: string | null;
+}
 
+// Extend NextAuth types
+declare module "next-auth" {
   interface Session {
     user: User;
   }
@@ -56,7 +57,7 @@ export const authOptions: AuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      authorize: async function authorize(credentials) {
+      authorize: async function authorize(credentials): Promise<User | null> {
         if (!credentials?.email?.length || !credentials?.password?.length) return null;
         try {
           const ds = await ReadyDataSource();
@@ -83,8 +84,9 @@ export const authOptions: AuthOptions = {
           }
           return {
             id: user.id,
-            displayName: user.displayName,
+            name: user.displayName,
             email: user.email,
+            displayName: user.displayName,
             avatarUrl,
           };
         } catch (e) {
@@ -99,16 +101,14 @@ export const authOptions: AuthOptions = {
     newUser: "/sign-up",
   },
   callbacks: {
-    async jwt({ token, user }: { token: TokenSet; user?: User }) {
+    async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.user = user as User;
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: TokenSet & { user?: User } }): Promise<Session> {
-      if (token.user) {
-        session.user = token.user;
-      }
+    async session({ session, token }) {
+      session.user = token.user as User;
       return session;
     },
   },

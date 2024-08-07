@@ -157,8 +157,17 @@ export default async function handler(
         // Generate pre-signed URLs for all recipes
         for (const recipe of recipes) {
             if (recipe.imageUrl) {
-                const key = recipe.imageUrl.split('/').pop();
-                recipe.imageUrl = await getSignedUrl(key);
+                const parts = recipe.imageUrl.split('/');
+                const key = parts[parts.length - 1]; // This is safer than pop()
+                if (key) {
+                    try {
+                        recipe.imageUrl = await getSignedUrl(key);
+                    } catch (error) {
+                        console.error('Error generating signed URL:', error);
+                        // Optionally, you can set imageUrl to null or keep the original value
+                        // recipe.imageUrl = null;
+                    }
+                }
             }
         }
 

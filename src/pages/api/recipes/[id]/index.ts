@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import AWS from 'aws-sdk';
+import { EntityManager, In } from "typeorm";
 
 import { ReadyDataSource } from "@/data-source";
 import { Recipe, RecipeCategory, RecipeDifficulty } from "@/entities/recipe.entity";
@@ -106,15 +107,31 @@ export default async function handler(
 
     // Generate a pre-signed URL for the avatar if available
     if (recipe.creator.avatarUrl) {
-      const key = recipe.creator.avatarUrl.split('/').pop();
-      recipe.creator.avatarUrl = await getSignedUrl(key);
+      const parts = recipe.creator.avatarUrl.split('/');
+      const key = parts[parts.length - 1];
+      if (key) {
+        try {
+          recipe.creator.avatarUrl = await getSignedUrl(key);
+        } catch (error) {
+          console.error('Error generating signed URL for creator avatar:', error);
+          recipe.creator.avatarUrl = undefined;
+        }
+      }
     }
 
     // Generate pre-signed URLs for each rating user's avatar
     for (const rating of recipe.ratings) {
       if (rating.user.avatarUrl) {
-        const key = rating.user.avatarUrl.split('/').pop();
-        rating.user.avatarUrl = await getSignedUrl(key);
+        const parts = rating.user.avatarUrl.split('/');
+        const key = parts[parts.length - 1];
+        if (key) {
+          try {
+            rating.user.avatarUrl = await getSignedUrl(key);
+          } catch (error) {
+            console.error('Error generating signed URL for rating user avatar:', error);
+            rating.user.avatarUrl = undefined;
+          }
+        }
       }
     }
 

@@ -2,10 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 import AWS from 'aws-sdk';
-
 import { ReadyDataSource } from "@/data-source";
 import { Rating } from "@/entities/rating.entity";
-
 import { authOptions } from "../../../auth/[...nextauth]";
 
 // Configure AWS SDK
@@ -24,7 +22,6 @@ export const getSignedUrl = (key: string): Promise<string> => {
     Key: key,
     Expires: 60 * 5, // URL expires in 5 minutes
   };
-
   return new Promise((resolve, reject) => {
     s3.getSignedUrl('getObject', params, (err, url) => {
       if (err) {
@@ -46,7 +43,6 @@ export default async function handler(
   res: NextApiResponse<Rating[] | Rating | string>
 ): Promise<void> {
   const { id } = req.query;
-
   if (!id || Array.isArray(id)) {
     res.status(500).send("Failed to find Id");
     return;
@@ -57,26 +53,33 @@ export default async function handler(
 
   if (req.method === "GET") {
     const ratings = await ratingRepo.find({ where: { recipeId: parseInt(id) }, relations: ["user"] });
-
+    
     // Generate pre-signed URLs for each user's avatar
     for (const rating of ratings) {
       if (rating.user.avatarUrl) {
-        const key = rating.user.avatarUrl.split('/').pop();
-        rating.user.avatarUrl = await getSignedUrl(key);
+        const parts = rating.user.avatarUrl.split('/');
+        const key = parts[parts.length - 1]; // This is safer than pop()
+        if (key) {
+          try {
+            rating.user.avatarUrl = await getSignedUrl(key);
+          } catch (error) {
+            console.error('Error generating signed URL:', error);
+            // Optionally, you can set avatarUrl to null or keep the original value
+            // rating.user.avatarUrl = null;
+          }
+        }
       }
     }
-
+    
     res.status(200).json(ratings);
   } else if (req.method === "POST") {
     const session = await getServerSession(req, res, authOptions);
-
     if (!session?.user) {
       res.status(400).end("Unauthenticated");
       return;
     }
 
     const postInput = PostBodySchema.safeParse(req.body);
-
     if (!postInput.success) {
       res.status(400).send("Invalid Input Data");
       return;
@@ -89,7 +92,6 @@ export default async function handler(
       comment: postInput.data.comment,
     });
     await ratingRepo.save(rating);
-
     res.status(200).json({} as Rating);
   } else {
     res.status(405).send("Method Not Allowed");

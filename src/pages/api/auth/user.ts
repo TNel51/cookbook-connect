@@ -1,4 +1,3 @@
-// api/auth/user.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
@@ -23,7 +22,6 @@ export const getSignedUrl = (key: string): Promise<string> => {
     Key: key,
     Expires: 60 * 5, // URL expires in 5 minutes
   };
-
   return new Promise((resolve, reject) => {
     s3.getSignedUrl('getObject', params, (err, url) => {
       if (err) {
@@ -45,14 +43,12 @@ export default async function handler(
   res: NextApiResponse<User | string>,
 ): Promise<void> {
   const session = await getServerSession(req, res, authOptions);
-
   if (!session?.user) {
     res.status(400).end("Unauthenticated");
     return;
   }
 
   const patchInput = PatchBodySchema.safeParse(req.body);
-
   if (!patchInput.success) {
     res.status(400).send("Invalid Input Data");
     return;
@@ -64,13 +60,21 @@ export default async function handler(
   if (req.method === "PATCH") {
     let user = await userRepo.findOneOrFail({ where: { id: session.user.id } });
     user = userRepo.merge(user, patchInput.data);
-
     await userRepo.save(user);
 
     // Generate a pre-signed URL for the avatar if available
     if (user.avatarUrl) {
-      const key = user.avatarUrl.split('/').pop();
-      user.avatarUrl = await getSignedUrl(key);
+      const parts = user.avatarUrl.split('/');
+      const key = parts[parts.length - 1]; // This is safer than pop()
+      if (key) {
+        try {
+          user.avatarUrl = await getSignedUrl(key);
+        } catch (error) {
+          console.error('Error generating signed URL:', error);
+          // Optionally, you can set avatarUrl to null or keep the original value
+          // user.avatarUrl = null;
+        }
+      }
     }
 
     res.status(200).json(user);
