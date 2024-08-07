@@ -18,7 +18,7 @@ if (process.env.DATABASE_HOST === undefined) throw Error("Failed to load DATABAS
 if (process.env.DATABASE_PORT === undefined) throw Error("Failed to load DATABASE_PORT env variable");
 if (process.env.DATABASE_USERNAME === undefined) throw Error("Failed to load DATABASE_USERNAME env variable");
 if (process.env.DATABASE_PASSWORD === undefined) throw Error("Failed to load DATABASE_PASSWORD env variable");
-if (process.env.DATABASE_DATABASE === undefined) throw Error("Failed to load DATABASE_DATABASE env variable");
+if (process.env.DATABASE_NAME === undefined) throw Error("Failed to load DATABASE_DATABASE env variable");
 
 export const DataSource = new ORMDataSource({
     type: "postgres",
@@ -26,7 +26,7 @@ export const DataSource = new ORMDataSource({
     port: parseInt(process.env.DATABASE_PORT),
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_DATABASE,
+    database: process.env.DATABASE_NAME,
     schema: "public",
     entities: [Ingredient, MealPlanDay, RatingReaction, Rating, RecipeIngredient, Recipe, Tag, Tool, User],
 });

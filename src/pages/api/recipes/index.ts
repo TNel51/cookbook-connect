@@ -2,6 +2,7 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import {getServerSession} from "next-auth";
 import {type EntityManager, In} from "typeorm";
 import {z} from "zod";
+import AWS from 'aws-sdk';
 
 import {ReadyDataSource, similarityBuilder} from "@/data-source";
 import {
@@ -14,6 +15,34 @@ import {Tag} from "../../../entities/tag.entity";
 import {Tool} from "../../../entities/tool.entity";
 import {includeAll} from "../../../lib/includeAll";
 import {authOptions} from "../auth/[...nextauth]";
+
+// Configure AWS SDK
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
+
+const s3 = new AWS.S3();
+
+// Function to generate pre-signed URL
+export const getSignedUrl = (key: string): Promise<string> => {
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME as string,
+      Key: key,
+      Expires: 60 * 5, // URL expires in 5 minutes
+    };
+  
+    return new Promise((resolve, reject) => {
+      s3.getSignedUrl('getObject', params, (err, url) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(url);
+        }
+      });
+    });
+  };
 
 const GetQuerySchema = z.object({
     mine: z.enum(["true", "false"]).optional(),
@@ -49,6 +78,7 @@ const PostBodySchema = z.object({
         quantity: z.string(),
         required: z.boolean(),
     })),
+    imageUrl: z.string(),
 }).strict();
 
 export default async function handler(
@@ -66,6 +96,9 @@ export default async function handler(
             return;
         }
 
+        let recipes: Recipe[];
+        let totalRecipes: number;
+
         if (getInput.data.mine) {
             const session = await getServerSession(req, res, authOptions);
 
@@ -74,7 +107,7 @@ export default async function handler(
                 return;
             }
         
-            const [recipes, totalRecipes] = await recipeRepo.findAndCount({
+            [recipes, totalRecipes] = await recipeRepo.findAndCount({
                 take: getInput.data.take,
                 skip: getInput.data.skip,
                 where: {
@@ -90,8 +123,6 @@ export default async function handler(
                 },
                 select: includeAll(recipeRepo),
             });
-    
-            res.status(200).json({total: totalRecipes, recipes: recipes});
         } else if (getInput.data.key) {
             const recipesBuilder = await similarityBuilder(Recipe, getInput.data.key, "title", 0.2, 10);
             recipesBuilder.orWhere(`${Recipe.constructor.name}.title ILIKE :query`, {query: `%${getInput.data.key.toLowerCase()}%`});
@@ -103,11 +134,9 @@ export default async function handler(
             recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.ingredients`, "ingredients");
             recipesBuilder.leftJoinAndSelect(`${Recipe.constructor.name}.tools`, "tools");
             
-            const [recipes, totalRecipes] = await recipesBuilder.getManyAndCount();
-
-            res.status(200).json({total: totalRecipes, recipes: recipes});
+            [recipes, totalRecipes] = await recipesBuilder.getManyAndCount();
         } else {
-            const [recipes, totalRecipes] = await recipeRepo.findAndCount({
+            [recipes, totalRecipes] = await recipeRepo.findAndCount({
                 take: getInput.data.take,
                 skip: getInput.data.skip,
                 where: {
@@ -123,9 +152,17 @@ export default async function handler(
                 },
                 select: includeAll(recipeRepo),
             });
-        
-            res.status(200).json({total: totalRecipes, recipes: recipes});
         }
+
+        // Generate pre-signed URLs for all recipes
+        for (const recipe of recipes) {
+            if (recipe.imageUrl) {
+                const key = recipe.imageUrl.split('/').pop();
+                recipe.imageUrl = await getSignedUrl(key);
+            }
+        }
+
+        res.status(200).json({total: totalRecipes, recipes: recipes});
     } else if (req.method === "POST") {
         const session = await getServerSession(req, res, authOptions);
 
@@ -151,6 +188,7 @@ export default async function handler(
                 difficulty: postInput.data.difficulty,
                 instructions: postInput.data.instructions,
                 time: postInput.data.time,
+                imageUrl: postInput.data.imageUrl,
             });
 
             await em.insert(Recipe, recipe);
