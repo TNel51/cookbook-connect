@@ -19,7 +19,7 @@ export default function RecipeSearch({
     setDifficultyFilter: (difficulty: RecipeDifficulty | "Any") => void;
 }): ReactElement {
     return (
-        <div className="bg-white dark:bg-gray-700 shadow rounded-lg p-4 my-5">
+        <div className="bg-white dark:bg-gray-900 shadow rounded-lg p-4 my-5">
             <form className="md:flex justify-center items-center w-full md:space-x-6">
                 <div className="md:flex md:space-x-2 mb-4 md:mb-0">
                     <label htmlFor="search_key" className="mb-2 md:my-auto md:me-2 block text-sm font-medium text-gray-900 dark:text-white">Search</label>

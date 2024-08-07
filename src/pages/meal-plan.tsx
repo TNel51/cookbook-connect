@@ -84,17 +84,20 @@ const MealPlan = (): ReactElement => {
                 <MealPlanColumn day={DayOfWeek.Saturday} meals={mealPlanDays.filter(m => m.day === DayOfWeek.Saturday)} />
             </div>
             <div className="mt-6 flex justify-end space-x-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Export Shopping List
-                </button>
                 {/* eslint-disable-next-line no-void */}
                 <button onClick={() => { void generatePDF() }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Export Week
                 </button>
+               
                 <button onClick={() => { clearPlan() } } className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Clear
                 </button>
             </div>
+           
+<div className = "flex justify-end">
+<p className="text-sm mt-1">PDF generation may not work in Safari browser</p>
+</div>
+
         </div>
     );
 };

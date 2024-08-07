@@ -206,6 +206,7 @@ export default function Recipe(): ReactElement {
             </div>
             {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <button type="button" onClick={async () => { await generatePDF() } } className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Export to PDF</button>
+            <p className="text-sm">We reccomend being light mode to generate the PDF</p>
             <div id="ratings" className="space-y-4">
                 {session.status === "authenticated" && !recipe.ratings.some(r => r.userId === session.data.user.id) && <form className="space-y-2" onSubmit={createRating}>
                     <label className="font-bold">Rate this Recipe</label>
