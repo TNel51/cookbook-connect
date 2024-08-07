@@ -77,7 +77,9 @@ export const authOptions: AuthOptions = {
           let avatarUrl: string | null = null;
           if (user.avatarUrl) {
             const key = user.avatarUrl.split('/').pop();
-            avatarUrl = await getSignedUrl(key);
+            if (key) {
+              avatarUrl = await getSignedUrl(key);
+            }
           }
           return {
             id: user.id,
