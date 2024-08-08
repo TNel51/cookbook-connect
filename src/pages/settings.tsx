@@ -43,7 +43,7 @@ export default function Settings(): ReactElement {
 
     const updateData = {
       displayName,
-      avatarUrl: uploadedAvatarUrl || avatarUrl,
+      avatarUrl: uploadedAvatarUrl ? uploadedAvatarUrl.split('/').pop()?.split('?')[0] : avatarUrl,
     };
 
     axios.patch("/api/auth/user", updateData)
