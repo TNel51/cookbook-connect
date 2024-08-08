@@ -16,30 +16,32 @@ export default function Recipes(): ReactElement {
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingMore, setLoadingMore] = useState<boolean>(false);
     const [recipes, setRecipes] = useState<RecipeEntity[]>([]);
-    const [totalRecipes, setTotalRecipes] = useState<number>(0);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const [searchKey, setSearchKey] = useState<string>("");
     const [categoryFilter, setCategoryFilter] = useState<RecipeCategory | "Any">("Any");
     const [difficultyFilter, setDifficultyFilter] = useState<RecipeDifficulty | "Any">("Any");
 
     const loadMoreRecipes = useCallback((): void => {
-        if (recipes.length >= totalRecipes || loadingMore) return;
+        if (!hasMore || loadingMore) return;
         setLoadingMore(true);
 
-        axios.get<{total: number; recipes: RecipeEntity[];}>(`/api/recipes?mine=true&take=10&skip=${recipes.length}${categoryFilter !== "Any" ? `&category=${categoryFilter}` : ""}${difficultyFilter !== "Any" ? `&difficulty=${difficultyFilter}` : ""}${searchKey !== "" ? `&key=${searchKey}` : ""}`)
+        axios.get<{recipes: RecipeEntity[];}>(`/api/recipes?take=10&skip=${recipes.length}${categoryFilter !== "Any" ? `&category=${categoryFilter}` : ""}${difficultyFilter !== "Any" ? `&difficulty=${difficultyFilter}` : ""}${searchKey !== "" ? `&key=${searchKey}` : ""}`)
             .then(res => {
-                setRecipes([...recipes, ...res.data.recipes.filter(r => !recipes.some(rr => rr.id === r.id))]);
+                const newRecipes = res.data.recipes.filter(r => !recipes.some(rr => rr.id === r.id));
+                setRecipes(prevRecipes => [...prevRecipes, ...newRecipes]);
+                setHasMore(newRecipes.length === 10);
                 setLoadingMore(false);
-                setTotalRecipes(res.data.total);
             })
-            .catch(() => {
-                toast.error("Failed to load recipes");
+            .catch((error) => {
+                console.error("API Error:", error);
+                toast.error("Failed to load more recipes");
                 setLoadingMore(false);
             });
-    }, [loadingMore, recipes, totalRecipes, searchKey, categoryFilter, difficultyFilter]);
+    }, [loadingMore, recipes, hasMore, searchKey, categoryFilter, difficultyFilter]);
 
     useEffect(() => {
         const handleScrollEvent = (): void => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
                 loadMoreRecipes();
             }
         };
@@ -50,30 +52,39 @@ export default function Recipes(): ReactElement {
 
     useEffect(() => {
         setLoading(true);
-        axios.get<{total: number; recipes: RecipeEntity[];}>(`/api/recipes?take=10&skip=0${categoryFilter !== "Any" ? `&category=${categoryFilter}` : ""}${difficultyFilter !== "Any" ? `&difficulty=${difficultyFilter}` : ""}${searchKey !== "" ? `&key=${searchKey}` : ""}`)
+        setRecipes([]);
+        setHasMore(true);
+        
+        axios.get<{recipes: RecipeEntity[];}>(`/api/recipes?take=10&skip=0${categoryFilter !== "Any" ? `&category=${categoryFilter}` : ""}${difficultyFilter !== "Any" ? `&difficulty=${difficultyFilter}` : ""}${searchKey !== "" ? `&key=${searchKey}` : ""}`)
             .then(res => {
                 setRecipes(res.data.recipes);
+                setHasMore(res.data.recipes.length === 10);
                 setLoading(false);
-                setTotalRecipes(res.data.total);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error("API Error:", error);
                 toast.error("Failed to load recipes");
+                setLoading(false);
             });
     }, [searchKey, categoryFilter, difficultyFilter]);
-    
-    return <section>
-        <RecipeSearch
-            searchKey={searchKey}
-            setSearchKey={setSearchKey}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            difficultyFilter={difficultyFilter}
-            setDifficultyFilter={setDifficultyFilter}
-        />
-        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
-            {!loading && (recipes.length ? recipes.map(r => <Recipe key={r.id} recipe={r}/>) : <div className="md:col-span-2 text-center text-lg mt-2">No recipes! Create one.</div>)}
-            {loadingMore || loading
-                ? <div className="md:col-span-2">
+
+    return (
+        <section>
+            <RecipeSearch
+                searchKey={searchKey}
+                setSearchKey={setSearchKey}
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+                difficultyFilter={difficultyFilter}
+                setDifficultyFilter={setDifficultyFilter}
+            />
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+                {recipes.map(r => <Recipe key={r.id} recipe={r}/>)}
+                {!loading && recipes.length === 0 && (
+                    <div className="md:col-span-2 text-center text-lg mt-2">No recipes found.</div>
+                )}
+                {(loadingMore || loading) && (
+                    <div className="md:col-span-2">
                         <div className="flex max-w-20 mx-auto">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                                 <circle fill="#266BFF" stroke="#266BFF" strokeWidth="15" r="15" cx="40" cy="65">
@@ -88,9 +99,8 @@ export default function Recipes(): ReactElement {
                             </svg>
                         </div>
                     </div>
-                : recipes.length < totalRecipes && <div className="md:col-span-2 flex justify-center">
-                    <button type="button" onClick={() => { loadMoreRecipes() } } className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md px-8 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Load More</button>
-                </div>}
-        </div>
-    </section>;
+                )}
+            </div>
+        </section>
+    );
 }
