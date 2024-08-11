@@ -124,7 +124,7 @@ export default function Recipe(): ReactElement {
                     <address className="flex items-center mb-6 not-italic">
                         <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                             {recipe.creator.avatarUrl
-                                ? <Image
+                                ? <img
                                         src={recipe.creator.avatarUrl}
                                         className="w-16 h-16 me-4 rounded-full"
                                         alt="Open user menu"
