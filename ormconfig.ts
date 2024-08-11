@@ -7,7 +7,7 @@ export const DataSource = new ORMDataSource({
     port: config.get("database.port"),
     username: config.get("database.username"),
     password: config.get("database.password"),
-    database: config.get("database.database"),
+    database: config.get("database.name"),
     schema: "public",
     entities: ["src/**/*.entity.ts"],
     migrationsTableName: "migrations",

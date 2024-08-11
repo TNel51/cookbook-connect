@@ -8,7 +8,7 @@ export default function Rating({ rating }: { rating: RatingEntity }): ReactEleme
     <div>
       <div className="flex items-center mb-4">
         {rating.user.avatarUrl ? (
-          <Image
+          <img
             src={rating.user.avatarUrl}
             className="w-10 h-10 me-4 rounded-full"
             alt="User avatar"

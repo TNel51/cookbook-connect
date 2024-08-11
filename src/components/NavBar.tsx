@@ -39,7 +39,7 @@ export default function NavBar(): ReactElement {
                 >
                   <span className="sr-only">Open user menu</span>
                   {session.user.avatarUrl ? (
-                    <Image
+                    <img
                       src={session.user.avatarUrl}
                       className="w-8 h-8 rounded-full mr-2"
                       alt="Open user menu"
