@@ -1,12 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import formidable from 'formidable';
 import fs from 'fs';
+import sharp from 'sharp'; // Import sharp for image optimization
 import { ReadStream } from 'fs';
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false
   },
 };
 
@@ -16,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // Handle preflight request
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
@@ -36,8 +36,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     console.log('Uploading file:', file.originalFilename);
-    console.log('Bucket:', process.env.S3_BUCKET_NAME);
-    console.log('Region:', process.env.AWS_REGION);
 
     const s3Client = new S3Client({
       region: process.env.AWS_REGION,
@@ -47,14 +45,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    // Optimize the image using sharp
+    const optimizedBuffer = await sharp(file.filepath)
+      .resize(800) // Resize the image to a max width of 800px
+      .jpeg({ quality: 85 }) // Convert to JPEG with 85% quality
+      .toBuffer();
+
     const params = {
       Bucket: process.env.S3_BUCKET_NAME as string,
       Key: `${Date.now()}-${file.originalFilename}`,
-      Body: fs.createReadStream(file.filepath) as ReadStream,
-      ContentType: file.mimetype as string,
+      Body: optimizedBuffer,
+      ContentType: 'image/jpeg',
     };
 
-    console.log('Sending command to S3');
     const command = new PutObjectCommand(params);
     const result = await s3Client.send(command);
     console.log('Upload successful:', result);

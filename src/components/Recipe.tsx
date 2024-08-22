@@ -18,7 +18,7 @@ export default function Recipe({ recipe }: { recipe: RecipeEntity; }): ReactElem
             className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 w-full"
         >
             {!imageError && recipe.imageUrl && (
-                <img 
+                <img
                     className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" 
                     src={recipe.imageUrl}
                     alt={recipe.title}
