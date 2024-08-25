@@ -1,5 +1,5 @@
 import { Dropdown } from "flowbite";
-import Image from "next/image";
+//import Image from "next/image";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { createRef, type ReactElement, useEffect, useState } from "react";
@@ -22,7 +22,7 @@ export default function NavBar(): ReactElement {
       <nav className="bg-white dark:bg-gray-900 w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-            <Image className="w-8 h-8 rounded-full dark:invert" src="/logo.svg" alt="Cookbook Connect Logo" height={32} width={32} />
+            <img className="w-8 h-8 rounded-full dark:invert" src="/logo.svg" alt="Cookbook Connect Logo" height={32} width={32} />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Cookbook Connect</span>
           </Link>
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
